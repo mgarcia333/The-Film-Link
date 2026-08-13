@@ -1,44 +1,45 @@
 <script setup lang="ts">
+const { locale } = useI18n()
 const statsStore = useStatsStore()
 </script>
 
 <template>
   <main class="mx-auto flex min-h-dvh max-w-md flex-col gap-6 px-4 py-12">
     <h1 class="font-heading text-lg uppercase tracking-widest text-ink">
-      estadísticas
+      {{ $t('nav.stats') }}
     </h1>
 
     <dl class="grid grid-cols-2 gap-3">
       <div class="border border-border bg-surface p-3">
         <dt class="font-mono text-xs text-ink-muted">
-          racha actual
+          {{ $t('stats.currentStreak') }}
         </dt>
         <dd class="font-mono text-2xl tabular-nums text-ink">
-          {{ statsStore.currentStreak }}
+          {{ formatNumber(statsStore.currentStreak, locale) }}
         </dd>
       </div>
       <div class="border border-border bg-surface p-3">
         <dt class="font-mono text-xs text-ink-muted">
-          mejor racha
+          {{ $t('stats.longestStreak') }}
         </dt>
         <dd class="font-mono text-2xl tabular-nums text-ink">
-          {{ statsStore.longestStreak }}
+          {{ formatNumber(statsStore.longestStreak, locale) }}
         </dd>
       </div>
       <div class="border border-border bg-surface p-3">
         <dt class="font-mono text-xs text-ink-muted">
-          jugados
+          {{ $t('stats.played') }}
         </dt>
         <dd class="font-mono text-2xl tabular-nums text-ink">
-          {{ statsStore.totalPlayed }}
+          {{ formatNumber(statsStore.totalPlayed, locale) }}
         </dd>
       </div>
       <div class="border border-border bg-surface p-3">
         <dt class="font-mono text-xs text-ink-muted">
-          ganados
+          {{ $t('stats.won') }}
         </dt>
         <dd class="font-mono text-2xl tabular-nums text-ink">
-          {{ statsStore.totalWon }}
+          {{ formatNumber(statsStore.totalWon, locale) }}
         </dd>
       </div>
     </dl>
@@ -47,7 +48,7 @@ const statsStore = useStatsStore()
       to="/"
       class="font-sans text-sm text-accent underline"
     >
-      volver al inicio
+      {{ $t('common.backHome') }}
     </NuxtLink>
   </main>
 </template>

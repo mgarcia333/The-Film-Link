@@ -1,0 +1,64 @@
+{
+  "app": {
+    "tagline": "connect two films through cast and crew, in as few steps as possible."
+  },
+  "nav": {
+    "dailyChallenge": "daily challenge",
+    "personalizedChallenge": "custom challenge",
+    "stats": "stats"
+  },
+  "search": {
+    "salidaLabel": "starting film",
+    "destinoLabel": "target film",
+    "searching": "searching...",
+    "searchFailed": "couldn't search. try again.",
+    "noResults": "no results.",
+    "change": "change"
+  },
+  "personalized": {
+    "subtitle": "choose the starting film and the target film.",
+    "sameMovie": "choose two different films.",
+    "notConnected": "these two films aren't connected within three hops. try another pair.",
+    "validationFailed": "couldn't check the connection. try again.",
+    "checking": "checking connection...",
+    "start": "start",
+    "cancel": "cancel"
+  },
+  "game": {
+    "youAreAtMovie": "you're at",
+    "youPicked": "you picked",
+    "undo": "undo",
+    "surrender": "give up",
+    "destinationLabel": "target: {title}",
+    "loadingOptions": "loading options...",
+    "optionsFailed": "couldn't load the options. try again.",
+    "noOptions": "no options available here.",
+    "cast": "cast",
+    "director": "director"
+  },
+  "result": {
+    "won": "you won",
+    "surrendered": "you gave up",
+    "stepsTaken": "steps taken",
+    "optimal": "optimal",
+    "yourPath": "your path",
+    "calculatingOptimal": "calculating the shortest path...",
+    "optimalFailed": "couldn't calculate the shortest path.",
+    "shortestPossible": "shortest possible path",
+    "playAgain": "play again"
+  },
+  "daily": {
+    "alreadyPlayed": "you've already played today's challenge. come back tomorrow.",
+    "preparing": "preparing today's challenge...",
+    "loadFailed": "couldn't load today's challenge. try again."
+  },
+  "stats": {
+    "currentStreak": "current streak",
+    "longestStreak": "best streak",
+    "played": "played",
+    "won": "won"
+  },
+  "common": {
+    "backHome": "back to home"
+  }
+}

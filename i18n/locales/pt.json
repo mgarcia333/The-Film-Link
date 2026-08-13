@@ -1,0 +1,64 @@
+{
+  "app": {
+    "tagline": "ligue dois filmes encadeando elenco e equipa técnica, no menor número de passos possível."
+  },
+  "nav": {
+    "dailyChallenge": "desafio diário",
+    "personalizedChallenge": "desafio personalizado",
+    "stats": "estatísticas"
+  },
+  "search": {
+    "salidaLabel": "filme de partida",
+    "destinoLabel": "filme de destino",
+    "searching": "a procurar...",
+    "searchFailed": "não foi possível procurar. tenta novamente.",
+    "noResults": "sem resultados.",
+    "change": "alterar"
+  },
+  "personalized": {
+    "subtitle": "escolhe o filme de partida e o filme de destino.",
+    "sameMovie": "escolhe dois filmes diferentes.",
+    "notConnected": "estes dois filmes não têm ligação em três saltos. experimenta outro par.",
+    "validationFailed": "não foi possível verificar a ligação. tenta novamente.",
+    "checking": "a verificar a ligação...",
+    "start": "começar",
+    "cancel": "cancelar"
+  },
+  "game": {
+    "youAreAtMovie": "estás em",
+    "youPicked": "escolheste",
+    "undo": "desfazer",
+    "surrender": "desistir",
+    "destinationLabel": "destino: {title}",
+    "loadingOptions": "a carregar opções...",
+    "optionsFailed": "não foi possível carregar as opções. tenta novamente.",
+    "noOptions": "não há opções disponíveis aqui.",
+    "cast": "elenco",
+    "director": "realização"
+  },
+  "result": {
+    "won": "ganhaste",
+    "surrendered": "desististe",
+    "stepsTaken": "passos dados",
+    "optimal": "ótimo",
+    "yourPath": "o teu caminho",
+    "calculatingOptimal": "a calcular o caminho mais curto...",
+    "optimalFailed": "não foi possível calcular o caminho mais curto.",
+    "shortestPossible": "caminho mais curto possível",
+    "playAgain": "jogar novamente"
+  },
+  "daily": {
+    "alreadyPlayed": "já jogaste o desafio de hoje. volta amanhã.",
+    "preparing": "a preparar o desafio de hoje...",
+    "loadFailed": "não foi possível carregar o desafio de hoje. tenta novamente."
+  },
+  "stats": {
+    "currentStreak": "sequência atual",
+    "longestStreak": "melhor sequência",
+    "played": "jogados",
+    "won": "ganhos"
+  },
+  "common": {
+    "backHome": "voltar ao início"
+  }
+}

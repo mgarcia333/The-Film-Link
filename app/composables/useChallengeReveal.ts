@@ -7,6 +7,7 @@ interface RevealResponse {
 }
 
 export function useChallengeReveal() {
+  const { locale } = useI18n()
   const pending = ref(false)
   const errorCode = ref<string | null>(null)
 
@@ -17,7 +18,7 @@ export function useChallengeReveal() {
     try {
       return await $fetch<RevealResponse>('/api/challenge/reveal', {
         method: 'POST',
-        body: { source, destination },
+        body: { source, destination, language: toTmdbLanguage(locale.value) },
       })
     }
     catch (error) {

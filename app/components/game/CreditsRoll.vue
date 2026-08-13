@@ -5,6 +5,7 @@ import type { GamePathNode } from '~/stores/game'
 // direction brief (person on the left, movie on the right per step). The
 // signature vertical-roll animation and stacking treatment land later.
 const { path } = defineProps<{ path: GamePathNode[] }>()
+const { locale } = useI18n()
 
 interface StepRow {
   person: GamePathNode
@@ -33,7 +34,7 @@ const steps = computed<StepRow[]>(() => {
       class="border-b border-dotted border-border px-3 py-2"
     >
       <p class="font-mono text-xs text-ink-muted">
-        salida
+        {{ $t('search.salidaLabel') }}
       </p>
       <p class="font-sans text-sm text-ink">
         {{ sourceMovie.name }}
@@ -44,7 +45,7 @@ const steps = computed<StepRow[]>(() => {
       :key="`${step.person.id}-${step.movie.id}`"
       class="flex items-center justify-between gap-3 border-b border-dotted border-border px-3 py-2 last:border-b-0"
     >
-      <span class="w-6 shrink-0 font-mono text-xs text-ink-muted">{{ index + 1 }}</span>
+      <span class="w-6 shrink-0 font-mono text-xs text-ink-muted">{{ formatNumber(index + 1, locale) }}</span>
       <span class="flex-1 font-sans text-sm text-ink">{{ step.person.name }}</span>
       <span class="flex-1 text-right font-sans text-sm text-ink">{{ step.movie.name }}</span>
     </div>

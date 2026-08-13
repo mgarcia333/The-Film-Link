@@ -3,6 +3,7 @@ import type { TmdbMovieSummary } from '~~/types/tmdb'
 const SEARCH_DEBOUNCE_MS = 300
 
 export function useMovieSearch() {
+  const { locale } = useI18n()
   const results = ref<TmdbMovieSummary[]>([])
   const pending = ref(false)
   const failed = ref(false)
@@ -18,7 +19,7 @@ export function useMovieSearch() {
 
     try {
       results.value = await $fetch<TmdbMovieSummary[]>('/api/movies/search', {
-        query: { q: query },
+        query: { q: query, lang: toTmdbLanguage(locale.value) },
         signal: controller.signal,
       })
     }

@@ -73,6 +73,12 @@ export interface TmdbPersonMovieCreditsResponse {
   crew: TmdbPersonCrewCredit[]
 }
 
+// The /movie/{id} details endpoint shares most fields with a search
+// result, but reports genres as full objects rather than genre_ids.
+export interface TmdbMovieDetails extends Omit<TmdbMovieSummary, 'genre_ids'> {
+  genres: Array<{ id: number, name: string }>
+}
+
 export interface TmdbErrorResponse {
   status_code: number
   status_message: string

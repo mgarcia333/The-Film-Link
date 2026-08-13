@@ -8,7 +8,7 @@
         the film link
       </h1>
       <p class="font-sans text-sm text-ink-muted">
-        conecta dos películas encadenando reparto y dirección, en el menor número de pasos posible.
+        {{ $t('app.tagline') }}
       </p>
     </header>
 
@@ -17,19 +17,19 @@
         to="/play/daily"
         class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
       >
-        reto diario
+        {{ $t('nav.dailyChallenge') }}
       </NuxtLink>
       <NuxtLink
         to="/play/personalized"
         class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
       >
-        reto personalizado
+        {{ $t('nav.personalizedChallenge') }}
       </NuxtLink>
       <NuxtLink
         to="/stats"
         class="text-center font-sans text-xs uppercase tracking-widest text-ink-muted transition-colors duration-[120ms] hover:text-ink"
       >
-        estadísticas
+        {{ $t('nav.stats') }}
       </NuxtLink>
     </nav>
   </main>
