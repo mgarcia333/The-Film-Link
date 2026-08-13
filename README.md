@@ -72,8 +72,8 @@ All of this pruning is defined once, as named constants, in
 dependency-free algorithm (`server/utils/path-finding/bidirectional-bfs.ts`)
 tested against an in-memory graph, decoupled from TMDB entirely.
 
-Credit lookups, search results, and computed paths are all cached in
-Cloudflare KV (credits for 30 days, computed paths effectively
+Credit lookups, search results, and computed paths are all cached in a
+Cloudflare D1 database (credits for 30 days, computed paths effectively
 indefinitely), which is what keeps repeat validation fast.
 
 ## Stack
@@ -85,7 +85,7 @@ indefinitely), which is what keeps repeat validation fast.
 - [TMDB API v3](https://developer.themoviedb.org), called only from Nitro
   server routes
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/) with
-  static assets, plus [Cloudflare KV](https://developers.cloudflare.com/kv/)
+  static assets, plus [Cloudflare D1](https://developers.cloudflare.com/d1/)
   for caching
 - [nuxt-auth-utils](https://github.com/atinux/nuxt-auth-utils) for Google
   sign-in (identity only - name and avatar)
@@ -104,7 +104,7 @@ cp .env.example .env
 npm run dev
 ```
 
-The dev server also uses Wrangler's local Cloudflare bindings (KV) via
+The dev server also uses Wrangler's local Cloudflare bindings (D1) via
 `wrangler.jsonc`, so nothing extra is needed to run the daily challenge or
 credit caching locally.
 
@@ -135,14 +135,19 @@ in the browser via Pinia, never on the server.
 
 ## Deploying to Cloudflare
 
-1. Create the KV namespace and copy its id:
+1. Create the D1 database, copy its id, and apply the schema:
 
    ```bash
-   npx wrangler kv namespace create GAME_KV
+   npx wrangler d1 create the-film-link-cache
    ```
 
-   Replace the placeholder `id` under `kv_namespaces` in `wrangler.jsonc`
-   with the one you get back.
+   Replace the placeholder `database_id` under `d1_databases` in
+   `wrangler.jsonc` with the one you get back, then run:
+
+   ```bash
+   npx wrangler d1 migrations apply the-film-link-cache --local
+   npx wrangler d1 migrations apply the-film-link-cache --remote
+   ```
 
 2. Set the production secrets (these are never read from `.env` in
    production - only `wrangler secret` reaches the deployed Worker):

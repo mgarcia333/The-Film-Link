@@ -7,45 +7,52 @@ Las siguientes variables de entorno deben configurarse en el dashboard de Cloudf
 ### Variables Secretas (Workers → Settings → Variables and secrets):
 
 ```
-NUXT_TMDB_API_KEY=***REMOVED-LEAKED-SECRET***
-NUXT_SESSION_PASSWORD=***REMOVED-LEAKED-SECRET***
+NUXT_TMDB_API_KEY=<tu-tmdb-api-key>
+NUXT_SESSION_PASSWORD=<una-cadena-aleatoria-larga>
 NUXT_OAUTH_GOOGLE_CLIENT_ID=<tu-google-client-id>
 NUXT_OAUTH_GOOGLE_CLIENT_SECRET=<tu-google-client-secret>
 ```
 
 **Notas:**
-- El `NUXT_TMDB_API_KEY` está configurado localmente
+- Nunca pegues valores reales de secretos en este archivo ni en ningún otro archivo versionado - solo van en el dashboard de Cloudflare (o en `.dev.vars`, que está en `.gitignore`) y no se comparten.
+- Para la TMDB API key, ver: https://www.themoviedb.org/settings/api
 - Para Google OAuth, ver: https://console.cloud.google.com/apis/credentials
-- El `NUXT_SESSION_PASSWORD` es para encriptar cookies de sesión
+- El `NUXT_SESSION_PASSWORD` es para encriptar cookies de sesión - genera algo como `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
 
-## Paso 2: KV Namespace
+## Paso 2: Base de datos D1
 
-El proyecto utiliza un KV namespace llamado `GAME_KV` para cachear datos de películas y precomputar retos diarios.
+El proyecto usa una base de datos D1 (`CACHE_DB`) como caché de datos de TMDB y para precomputar retos diarios y por dificultad.
 
-### Crear el namespace:
+### Crear la base de datos:
 ```bash
-wrangler kv namespace create GAME_KV --preview false
-wrangler kv namespace create GAME_KV --preview true
+wrangler d1 create the-film-link-cache
 ```
 
-Esto devolverá un ID. Copia el ID de producción en `wrangler.jsonc`:
+Esto devolverá un `database_id`. Copialo en `wrangler.jsonc`:
 
 ```jsonc
-"kv_namespaces": [
+"d1_databases": [
   {
-    "binding": "GAME_KV",
-    "id": "tu-namespace-id-aqui",
-    "preview_id": "tu-namespace-preview-id-aqui"
+    "binding": "CACHE_DB",
+    "database_name": "the-film-link-cache",
+    "database_id": "tu-database-id-aqui",
+    "migrations_dir": "migrations"
   }
 ]
+```
+
+### Aplicar el esquema:
+```bash
+wrangler d1 migrations apply the-film-link-cache --local
+wrangler d1 migrations apply the-film-link-cache --remote
 ```
 
 ## Paso 3: Configuración de Build
 
 El `wrangler.jsonc` ya está configurado correctamente:
 - ✅ Preset: `cloudflare_module`
-- ✅ Storage: KV binding para `GAME_KV`
-- ✅ Tasks: Scheduled para precalcular reto diario a las 00:05 UTC
+- ✅ Storage: D1 binding para `CACHE_DB`
+- ✅ Tasks: Scheduled para precalcular reto diario y reservas de dificultad a las 00:05 UTC
 - ✅ Assets: Sirve archivos estáticos desde `.output/public`
 
 ## Paso 4: Verificar Build Local
@@ -75,7 +82,7 @@ O usa el deploy automático si está configurado en Cloudflare.
 
 ## Checklist Final
 
-- [ ] KV namespace creado y ID configurado en `wrangler.jsonc`
+- [ ] Base de datos D1 creada, esquema aplicado, e ID configurado en `wrangler.jsonc`
 - [ ] Todas las variables de entorno en Cloudflare Dashboard
 - [ ] Build local sin errores: `npm run build`
 - [ ] TypeScript sin errores: `npm run typecheck`
@@ -86,9 +93,9 @@ O usa el deploy automático si está configurado en Cloudflare.
 
 ## Troubleshooting
 
-**Error: "KV namespace binding not found"**
-- Verifica que el ID en `wrangler.jsonc` es correcto
-- Verifica que el namespace existe en Cloudflare Dashboard
+**Error: "CACHE_DB binding is not available"**
+- Verifica que el `database_id` en `wrangler.jsonc` es correcto
+- Verifica que la base de datos existe en Cloudflare Dashboard y que el esquema (`migrations/`) está aplicado tanto en local como en remoto
 
 **Error: "TMDB API Key not found"**
 - Verifica que `NUXT_TMDB_API_KEY` está en Cloudflare Dashboard
