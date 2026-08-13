@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { GameMode } from '~/stores/game'
+
 definePageMeta({ ssr: false })
 
 const { locale } = useI18n()
@@ -47,10 +49,16 @@ const matchingIds = computed(() => {
   return matches
 })
 
+const PLAY_AGAIN_DESTINATION: Record<NonNullable<GameMode>, string> = {
+  daily: '/',
+  difficulty: '/play/difficulty',
+  personalized: '/play/personalized',
+}
+
 async function playAgain() {
-  const wasDaily = gameStore.mode === 'daily'
+  const destination = gameStore.mode ? PLAY_AGAIN_DESTINATION[gameStore.mode] : '/'
   gameStore.reset()
-  await navigateTo(wasDaily ? '/' : '/play/personalized')
+  await navigateTo(destination)
 }
 </script>
 

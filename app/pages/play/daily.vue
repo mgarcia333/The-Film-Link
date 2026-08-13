@@ -48,23 +48,41 @@ onMounted(async () => {
 
 <template>
   <main class="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-4 px-4 py-12 text-center">
-    <p
-      v-if="alreadyPlayedToday"
-      class="font-sans text-sm text-ink-muted"
-    >
-      {{ $t('daily.alreadyPlayed') }}
-    </p>
+    <template v-if="alreadyPlayedToday">
+      <p class="font-sans text-sm text-ink-muted">
+        {{ $t('daily.alreadyPlayed') }}
+      </p>
+      <div class="flex items-center gap-4">
+        <NuxtLink
+          to="/stats"
+          class="font-sans text-sm text-accent underline"
+        >
+          {{ $t('nav.stats') }}
+        </NuxtLink>
+        <NuxtLink
+          to="/"
+          class="font-sans text-sm text-accent underline"
+        >
+          {{ $t('common.backHome') }}
+        </NuxtLink>
+      </div>
+    </template>
     <p
       v-else-if="pending"
       class="font-sans text-sm text-ink-muted"
     >
       {{ $t('daily.preparing') }}
     </p>
-    <p
-      v-else-if="errorCode"
-      class="font-sans text-sm text-danger"
-    >
-      {{ $t('daily.loadFailed') }}
-    </p>
+    <template v-else-if="errorCode">
+      <p class="font-sans text-sm text-danger">
+        {{ $t('daily.loadFailed') }}
+      </p>
+      <NuxtLink
+        to="/"
+        class="font-sans text-sm text-accent underline"
+      >
+        {{ $t('common.backHome') }}
+      </NuxtLink>
+    </template>
   </main>
 </template>
