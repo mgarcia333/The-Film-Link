@@ -48,13 +48,22 @@ async function performFetch<T>(path: string, params: TmdbParams, externalSignal?
   try {
     const response = await fetch(url, { signal })
 
+    // Workers caps how many concurrent fetch() responses can have an
+    // unread body; throwing here without draining it leaves the
+    // connection open until GC, and enough of those in flight at once
+    // (a difficulty search alone can throw on dozens of 404s) triggers
+    // Cloudflare to force-cancel the oldest one to avoid deadlock - which
+    // then surfaces as a spurious, unrelated fetch failure elsewhere.
     if (response.status === 404) {
+      await response.body?.cancel()
       throw new TmdbError('TMDB_NOT_FOUND', `TMDB resource not found: ${path}`)
     }
     if (response.status === 429) {
+      await response.body?.cancel()
       throw new TmdbError('TMDB_RATE_LIMITED', `TMDB rate limit exceeded: ${path}`)
     }
     if (!response.ok) {
+      await response.body?.cancel()
       throw new TmdbError('TMDB_UNAVAILABLE', `TMDB request failed with status ${response.status}: ${path}`)
     }
 
