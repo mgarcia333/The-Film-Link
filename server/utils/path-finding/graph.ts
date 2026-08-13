@@ -1,7 +1,7 @@
 import type { TmdbMovieSummary } from '~~/types/tmdb'
 import type { NeighborFetcher, SearchNode } from './bidirectional-bfs'
 import { getMovieCastAndCrew, getPersonFilmography, getRawMovieCredits, getRawPersonMovieCredits } from '../tmdb/credits'
-import { DIRECTING_JOB, MAX_CAST_PER_MOVIE, isCreditedRole, isEligibleMovie } from '../tmdb/pruning'
+import { DIRECTING_JOB, MAX_CAST_PER_MOVIE, isCreditedRole, isEligibleMovie, pruneCreditedCast } from '../tmdb/pruning'
 
 export type PathNodeKind = 'movie' | 'person'
 
@@ -96,8 +96,7 @@ export function createBackwardNeighborFetcher(context: GraphSearchContext): Neig
         return []
       }
       const credits = await getRawMovieCredits(node.tmdbId, context.language, context.signal)
-      const cast = credits.cast
-        .filter(member => isCreditedRole(member.character))
+      const cast = pruneCreditedCast(credits.cast)
         .map(member => toPersonNode({ id: member.id, name: member.name, profilePath: member.profile_path }))
       const directors = credits.crew
         .filter(member => member.job === DIRECTING_JOB)
