@@ -51,6 +51,18 @@ export async function getDifficultyChallenge(
   signal?: AbortSignal,
 ): Promise<DifficultyChallenge> {
   const canonical = await generateDifficultyChallenge(difficulty, signal)
+  return localizeDifficultyChallenge(canonical, displayLanguage, signal)
+}
+
+// Split out from getDifficultyChallenge so the ready-pool (see pool.ts) can
+// generate once in the background and localize separately, on demand, per
+// request - generation is the expensive, TMDB-heavy part; localizing an
+// already-known pair of ids is cheap.
+export async function localizeDifficultyChallenge(
+  canonical: DifficultyChallenge,
+  displayLanguage: string,
+  signal?: AbortSignal,
+): Promise<DifficultyChallenge> {
   if (displayLanguage === GENERATION_LANGUAGE) {
     return canonical
   }
@@ -62,7 +74,7 @@ export async function getDifficultyChallenge(
   return { source, destination }
 }
 
-async function generateDifficultyChallenge(difficulty: DifficultyLevel, signal?: AbortSignal): Promise<DifficultyChallenge> {
+export async function generateDifficultyChallenge(difficulty: DifficultyLevel, signal?: AbortSignal): Promise<DifficultyChallenge> {
   const pool = await getMoviePool(`pool:${difficulty}:${GENERATION_LANGUAGE}`, TIER_POOL_CONFIG[difficulty], GENERATION_LANGUAGE, signal)
   if (pool.length < 2) {
     throw new Error(`Not enough eligible candidate movies to build a ${difficulty} challenge`)

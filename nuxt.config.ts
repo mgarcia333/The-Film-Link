@@ -36,11 +36,13 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true,
     },
-    // Optional: precomputes the daily challenge shortly after UTC midnight
-    // so the first visitor doesn't pay the generation cost. Not required -
-    // getDailyChallenge() also generates lazily on first request.
+    // Optional safety net, not the primary mechanism: each difficulty tier's
+    // ready-pool is mainly kept topped up reactively (see server/api/challenge/
+    // difficulty.get.ts, which refills right after popping). This just
+    // guarantees a warm buffer after a fresh deploy and recovers a pool that
+    // somehow ran dry without anyone refilling it.
     scheduledTasks: {
-      '5 0 * * *': ['warm-daily-challenge'],
+      '5 0 * * *': ['warm-daily-challenge', 'warm-difficulty-pools'],
     },
   },
 

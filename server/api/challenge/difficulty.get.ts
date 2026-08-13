@@ -1,5 +1,6 @@
 import type { DifficultyLevel } from '~~/types/difficulty'
-import { getDifficultyChallenge } from '../../utils/difficulty-challenge/generate'
+import { getDifficultyChallenge, localizeDifficultyChallenge } from '../../utils/difficulty-challenge/generate'
+import { popFromPool, refillPool } from '../../utils/difficulty-challenge/pool'
 import { TmdbError } from '../../utils/tmdb/client'
 import { handleTmdbError } from '../../utils/tmdb/handle-error'
 
@@ -7,7 +8,8 @@ const VALID_DIFFICULTIES: DifficultyLevel[] = ['easy', 'normal', 'difficult']
 
 // Generous but bounded: generation runs a search-and-retry loop server-side,
 // so it deserves more room than the single-pair validate budget, but must
-// never hang indefinitely.
+// never hang indefinitely. Only reached on the cold-pool fallback path
+// below - the common case is a KV read, nowhere near this budget.
 const GENERATION_TIMEOUT_MS = 20000
 
 export default defineEventHandler(async (event) => {
@@ -17,12 +19,36 @@ export default defineEventHandler(async (event) => {
     : 'normal') as DifficultyLevel
   const language = typeof query.lang === 'string' ? query.lang : 'es-ES'
 
+  // Fast path: a challenge is already sitting ready in KV from a previous
+  // background refill, so serving it is just a KV read plus (if the
+  // display language differs) localizing two already-known movie ids - no
+  // live search, no TMDB fan-out, no wait. Refilling the slot this just
+  // emptied happens after the response is sent, never before.
+  const pooled = await popFromPool(difficulty)
+  if (pooled) {
+    event.waitUntil(refillPool(difficulty).catch(() => {}))
+    try {
+      return await localizeDifficultyChallenge(pooled, language, toWebRequest(event).signal)
+    }
+    catch {
+      // Localizing an already-generated pair failed (e.g. a transient TMDB
+      // hiccup) - fall through to a fresh live generation rather than
+      // wasting the response on an error the player can't do anything about.
+    }
+  }
+
+  // Cold path: nothing was ready (first request after a deploy, or the
+  // buffer got drained faster than it refilled). Generates live, the same
+  // way this endpoint always has, then tops the buffer up in the
+  // background so the next request doesn't pay this cost again either.
   const timeoutController = new AbortController()
   const timeout = setTimeout(() => timeoutController.abort(), GENERATION_TIMEOUT_MS)
   const signal = AbortSignal.any([timeoutController.signal, toWebRequest(event).signal])
 
   try {
-    return await getDifficultyChallenge(difficulty, language, signal)
+    const result = await getDifficultyChallenge(difficulty, language, signal)
+    event.waitUntil(refillPool(difficulty).catch(() => {}))
+    return result
   }
   catch (error) {
     if (error instanceof TmdbError) {
