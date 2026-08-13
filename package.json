@@ -12,7 +12,8 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "nuxt build && wrangler deploy"
+    "deploy": "nuxt build && wrangler deploy",
+    "verify-deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {
     "@nuxtjs/i18n": "^10.6.0",

@@ -11,13 +11,17 @@
   "kv_namespaces": [
     {
       "binding": "GAME_KV",
-      // placeholder id for local dev; replace with a real namespace before deploying
-      // (see README: `wrangler kv namespace create GAME_KV`)
-      "id": "00000000000000000000000000000000"
+      // Create namespaces with:
+      // wrangler kv namespace create GAME_KV --preview false
+      // wrangler kv namespace create GAME_KV --preview true
+      // Then replace "id" and "preview_id" below with the returned IDs
+      "id": "00000000000000000000000000000000",
+      "preview_id": "00000000000000000000000000000000"
     }
   ],
-  // Optional: precomputes the daily challenge shortly after UTC midnight.
-  // Safe to remove - the challenge also generates lazily on first request.
+  // Precomputes the daily challenge shortly after UTC midnight (05:00 UTC).
+  // This avoids the first request paying the generation cost.
+  // Safe to remove - challenge also generates lazily on first request.
   "triggers": {
     "crons": ["5 0 * * *"]
   }
