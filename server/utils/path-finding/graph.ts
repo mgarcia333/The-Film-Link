@@ -1,7 +1,7 @@
 import type { TmdbMovieSummary } from '~~/types/tmdb'
 import type { NeighborFetcher, SearchNode } from './bidirectional-bfs'
 import { getMovieCastAndCrew, getPersonFilmography, getRawMovieCredits, getRawPersonMovieCredits } from '../tmdb/credits'
-import { DIRECTING_JOB, MAX_CAST_PER_MOVIE, isCreditedRole, isEligibleMovie, pruneCreditedCast } from '../tmdb/pruning'
+import { DIRECTING_JOB, MAX_CAST_PER_MOVIE, MAX_FORWARD_FILMOGRAPHY_PER_PERSON, isCreditedRole, isEligibleMovie, pruneCreditedCast } from '../tmdb/pruning'
 
 export type PathNodeKind = 'movie' | 'person'
 
@@ -78,7 +78,7 @@ export function createForwardNeighborFetcher(context: GraphSearchContext): Neigh
 
     // getPersonFilmography already applies isEligibleMovie, so every result
     // here is known-eligible without re-deriving it from partial data.
-    const movies = await getPersonFilmography(node.tmdbId, context.language, context.signal)
+    const movies = await getPersonFilmography(node.tmdbId, context.language, context.signal, MAX_FORWARD_FILMOGRAPHY_PER_PERSON)
     return dedupeNodes(movies.map(movie => toMovieNode({ id: movie.id, title: movie.title, posterPath: movie.posterPath }, true)))
   }
 }

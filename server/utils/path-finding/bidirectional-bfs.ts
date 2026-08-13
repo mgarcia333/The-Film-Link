@@ -27,12 +27,21 @@ export interface BidirectionalSearchOptions<T extends SearchNode> {
   // Total edge traversals allowed, i.e. twice the maximum number of
   // intermediate movies.
   maxHops: number
+  // Hard ceiling on total neighbor-fetch calls (i.e. TMDB subrequests) across
+  // the whole search. BFS fan-out compounds layer over layer, so even with
+  // per-node pruning upstream a pathological pair (a run of unusually
+  // prolific connectors) can still cost enough subrequests to hit the
+  // Worker's own resource limits. Exceeding it is treated the same as
+  // exhausting maxHops: the pair is reported as not found within budget,
+  // never as a crash. Optional and unbounded by default so generic/test
+  // usage isn't forced to think about TMDB-specific budgets.
+  maxNeighborFetches?: number
 }
 
 export async function findShortestPath<T extends SearchNode>(
   options: BidirectionalSearchOptions<T>,
 ): Promise<T[] | null> {
-  const { source, destination, getForwardNeighbors, getBackwardNeighbors, maxHops } = options
+  const { source, destination, getForwardNeighbors, getBackwardNeighbors, maxHops, maxNeighborFetches = Number.POSITIVE_INFINITY } = options
 
   if (source.id === destination.id) {
     return [source]
@@ -44,9 +53,16 @@ export async function findShortestPath<T extends SearchNode>(
   let forwardFrontier = [source]
   let backwardFrontier = [destination]
   let hopsUsed = 0
+  let neighborFetchesUsed = 0
 
   while (forwardFrontier.length > 0 && backwardFrontier.length > 0 && hopsUsed < maxHops) {
     const expandingForward = forwardFrontier.length <= backwardFrontier.length
+    const frontier = expandingForward ? forwardFrontier : backwardFrontier
+
+    neighborFetchesUsed += frontier.length
+    if (neighborFetchesUsed > maxNeighborFetches) {
+      return null
+    }
 
     const { newLayer, meetingId } = expandingForward
       ? await expandLayer(forwardFrontier, getForwardNeighbors, forwardVisited, backwardVisited)

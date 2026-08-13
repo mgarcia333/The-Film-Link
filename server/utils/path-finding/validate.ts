@@ -10,6 +10,14 @@ import { getOrSetCache } from '../kv-cache'
 export const MAX_INTERMEDIATE_MOVIES = 3
 const MAX_HOPS = MAX_INTERMEDIATE_MOVIES * 2
 
+// Hard ceiling on TMDB subrequests for a single search, comfortably under
+// Cloudflare Workers' own per-invocation subrequest limit. Per-node pruning
+// (see pruning.ts) keeps typical searches far under this; it only kicks in
+// for pathological pairs, where it fails the pair as "not connected within
+// budget" instead of risking the Worker being killed for exceeding its
+// resource limits mid-search.
+const MAX_NEIGHBOR_FETCHES_PER_SEARCH = 48
+
 // A validated pair essentially never needs recomputing: the underlying
 // credits data changes rarely enough that a long-lived cache entry is
 // effectively permanent for gameplay purposes.
@@ -45,6 +53,7 @@ export async function findPathBetweenMovies(
       getForwardNeighbors: createForwardNeighborFetcher(context),
       getBackwardNeighbors: createBackwardNeighborFetcher(context),
       maxHops: MAX_HOPS,
+      maxNeighborFetches: MAX_NEIGHBOR_FETCHES_PER_SEARCH,
     })
 
     if (!path) {

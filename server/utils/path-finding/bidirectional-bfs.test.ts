@@ -121,6 +121,22 @@ describe('findShortestPath', () => {
     ])
   })
 
+  it('returns null once maxNeighborFetches is exceeded, even with hops to spare', async () => {
+    // The short route needs to expand origin (1 fetch) then either lead1 or
+    // decoyA (2 fetches) before it can reach bridge - a budget of 1 cuts it
+    // off after the very first layer.
+    const path = await findShortestPath({
+      source: node('movie:origin'),
+      destination: node('movie:target'),
+      getForwardNeighbors: getNeighbors,
+      getBackwardNeighbors: getNeighbors,
+      maxHops: 6,
+      maxNeighborFetches: 1,
+    })
+
+    expect(path).toBeNull()
+  })
+
   it('uses the backward relation as given, not as a reverse of the forward one', async () => {
     // S -> A -> T is the only real forward path. The backward fetcher is
     // supplied explicitly and deliberately differs from what naively

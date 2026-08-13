@@ -71,24 +71,38 @@ export async function getMovieCastAndCrew(
   return dedupeById([...cast, ...directors])
 }
 
+// maxResults exists for the path-finding engine (see graph.ts), which needs
+// a hard ceiling on a prolific person's fan-out; the gameplay-facing options
+// endpoint calls this with no cap so players always see their full,
+// unfiltered filmography.
 export async function getPersonFilmography(
   personId: number,
   language = 'es-ES',
   signal?: AbortSignal,
+  maxResults?: number,
 ): Promise<FilmographyMovie[]> {
   const credits = await getRawPersonMovieCredits(personId, language, signal)
 
-  const asCast: FilmographyMovie[] = credits.cast
-    .filter(isEligibleMovie)
-    .filter(credit => isCreditedRole(credit.character))
-    .map(credit => toFilmographyMovie(credit, 'cast'))
+  const eligibleCast = credits.cast.filter(isEligibleMovie).filter(credit => isCreditedRole(credit.character))
+  const eligibleCrew = credits.crew.filter(isEligibleMovie).filter(credit => credit.job === DIRECTING_JOB)
 
-  const asDirector: FilmographyMovie[] = credits.crew
-    .filter(isEligibleMovie)
-    .filter(credit => credit.job === DIRECTING_JOB)
-    .map(credit => toFilmographyMovie(credit, 'director'))
+  const asCast: FilmographyMovie[] = eligibleCast.map(credit => toFilmographyMovie(credit, 'cast'))
+  const asDirector: FilmographyMovie[] = eligibleCrew.map(credit => toFilmographyMovie(credit, 'director'))
+  const combined = dedupeById([...asCast, ...asDirector])
 
-  return dedupeById([...asCast, ...asDirector])
+  if (!maxResults || combined.length <= maxResults) {
+    return combined
+  }
+
+  // Keep the most-recognizable films when trimming: the same vote_count-based
+  // fame proxy used elsewhere (see movie-pool.ts). FilmographyMovie itself
+  // doesn't carry vote_count, so it's looked up from the raw credits.
+  const voteCountById = new Map<number, number>(
+    [...eligibleCast, ...eligibleCrew].map(credit => [credit.id, credit.vote_count]),
+  )
+  return [...combined]
+    .sort((a, b) => (voteCountById.get(b.id) ?? 0) - (voteCountById.get(a.id) ?? 0))
+    .slice(0, maxResults)
 }
 
 function toFilmographyMovie(

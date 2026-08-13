@@ -17,6 +17,18 @@ export const DOCUMENTARY_GENRE_ID = 99
 // enough that it essentially never changes whether a path is found.
 export const MAX_BACKWARD_CAST_PER_MOVIE = 50
 
+// Ceiling on how many of a person's eligible film credits the search engine
+// expands forward from a person node (see graph.ts). A prolific actor's full
+// filmography can run into the hundreds; each one becomes a node the *next*
+// layer has to expand in turn, so left uncapped a single well-known but
+// prolific connector can multiply into far more TMDB calls than a search's
+// total budget allows (see MAX_NEIGHBOR_FETCHES_PER_SEARCH in validate.ts).
+// Keeping the most-recognizable films (highest vote_count) essentially never
+// changes whether a path is found - same reasoning as the backward cap above.
+// Only applied to the search's own traversal, never to the gameplay-facing
+// options a player actually sees (getPersonFilmography's default is unbounded).
+export const MAX_FORWARD_FILMOGRAPHY_PER_PERSON = 30
+
 const UNCREDITED_OR_SELF_PATTERN = /uncredited|^self\b/i
 
 export function isCreditedRole(character: string): boolean {
