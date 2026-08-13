@@ -13,13 +13,30 @@ interface Option {
 const { t, locale } = useI18n()
 const gameStore = useGameStore()
 const { pending, failed, loadMovieOptions, loadPersonOptions } = useNodeOptions()
+const { reveal } = useChallengeReveal()
 
 if (!gameStore.status) {
   await navigateTo('/')
 }
 
+// Computed the moment the pair is known instead of when the player
+// finishes, so the result screen almost never has to wait for it - the
+// path only depends on source/destination, never on how the player gets
+// there, so there's nothing to invalidate by playing on.
+onMounted(() => {
+  const { status, optimalPath, sourceMovie, destinationMovie } = gameStore
+  if (status === 'playing' && !optimalPath && sourceMovie && destinationMovie) {
+    reveal(sourceMovie, destinationMovie).then((result) => {
+      if (result.path && result.stepCount !== null) {
+        gameStore.setOptimalPath(result.path, result.stepCount)
+      }
+    })
+  }
+})
+
 const options = ref<Option[]>([])
 const visitedMovieIds = computed(() => new Set(gameStore.playedPath.filter(node => node.kind === 'movie').map(node => node.id)))
+const currentImageUrl = computed(() => tmdbImageUrl(gameStore.currentNode?.imagePath ?? null, 'w342'))
 
 async function loadOptions() {
   const node = gameStore.currentNode
@@ -89,10 +106,22 @@ async function undo() {
       </p>
     </header>
 
-    <p class="font-mono text-xs text-ink-muted">
-      {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
-      <span class="text-highlight">{{ gameStore.currentNode?.name }}</span>
-    </p>
+    <div class="flex items-center gap-3">
+      <img
+        v-if="currentImageUrl"
+        :src="currentImageUrl"
+        :alt="gameStore.currentNode?.name"
+        class="h-24 w-16 shrink-0 border border-border object-cover"
+      >
+      <div
+        v-else
+        class="h-24 w-16 shrink-0 border border-border"
+      />
+      <p class="font-sans text-sm text-ink-muted">
+        {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
+        <span class="block font-heading text-lg text-highlight">{{ gameStore.currentNode?.name }}</span>
+      </p>
+    </div>
 
     <CreditsRoll
       :path="gameStore.playedPath"
