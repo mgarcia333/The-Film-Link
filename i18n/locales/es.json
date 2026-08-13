@@ -64,5 +64,9 @@
   "theme": {
     "light": "claro",
     "dark": "oscuro"
+  },
+  "auth": {
+    "signIn": "iniciar sesión con Google",
+    "signOut": "cerrar sesión"
   }
 }
