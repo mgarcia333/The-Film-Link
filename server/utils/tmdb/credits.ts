@@ -20,16 +20,39 @@ export interface FilmographyMovie {
   creditedAs: 'cast' | 'director'
 }
 
+// Cached raw responses, shared by both the forward (gameplay-facing) and
+// backward (path-finding) views over the same credits: a movie or person's
+// TMDB data only needs fetching once no matter which direction reads it.
+export function getRawMovieCredits(
+  movieId: number,
+  language = 'es-ES',
+  signal?: AbortSignal,
+): Promise<TmdbMovieCreditsResponse> {
+  return getOrSetCache(
+    `tmdb:movie:${movieId}:credits:${language}`,
+    CREDITS_CACHE_TTL_SECONDS,
+    () => tmdbFetch<TmdbMovieCreditsResponse>(`/movie/${movieId}/credits`, { language }, signal),
+  )
+}
+
+export function getRawPersonMovieCredits(
+  personId: number,
+  language = 'es-ES',
+  signal?: AbortSignal,
+): Promise<TmdbPersonMovieCreditsResponse> {
+  return getOrSetCache(
+    `tmdb:person:${personId}:movie_credits:${language}`,
+    CREDITS_CACHE_TTL_SECONDS,
+    () => tmdbFetch<TmdbPersonMovieCreditsResponse>(`/person/${personId}/movie_credits`, { language }, signal),
+  )
+}
+
 export async function getMovieCastAndCrew(
   movieId: number,
   language = 'es-ES',
   signal?: AbortSignal,
 ): Promise<CastOrCrewPerson[]> {
-  const credits = await getOrSetCache(
-    `tmdb:movie:${movieId}:credits:${language}`,
-    CREDITS_CACHE_TTL_SECONDS,
-    () => tmdbFetch<TmdbMovieCreditsResponse>(`/movie/${movieId}/credits`, { language }, signal),
-  )
+  const credits = await getRawMovieCredits(movieId, language, signal)
 
   const cast: CastOrCrewPerson[] = pruneCast(credits.cast).map(member => ({
     id: member.id,
@@ -53,11 +76,7 @@ export async function getPersonFilmography(
   language = 'es-ES',
   signal?: AbortSignal,
 ): Promise<FilmographyMovie[]> {
-  const credits = await getOrSetCache(
-    `tmdb:person:${personId}:movie_credits:${language}`,
-    CREDITS_CACHE_TTL_SECONDS,
-    () => tmdbFetch<TmdbPersonMovieCreditsResponse>(`/person/${personId}/movie_credits`, { language }, signal),
-  )
+  const credits = await getRawPersonMovieCredits(personId, language, signal)
 
   const asCast: FilmographyMovie[] = credits.cast
     .filter(isEligibleMovie)
@@ -85,7 +104,7 @@ function toFilmographyMovie(
   }
 }
 
-function dedupeById<T extends { id: number }>(items: T[]): T[] {
+export function dedupeById<T extends { id: number }>(items: T[]): T[] {
   const seen = new Set<number>()
   return items.filter((item) => {
     if (seen.has(item.id)) {
