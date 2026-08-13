@@ -38,12 +38,15 @@ const MAX_GENERATION_ATTEMPTS = 30
 // pool) is the single most expensive outcome: the search has to exhaust
 // every layer on both sides before it can conclude that. Capping each
 // attempt keeps one unlucky pair from eating the whole generation budget -
-// it's simply abandoned in favor of a fresh random pair.
-const PER_ATTEMPT_TIMEOUT_MS = 3000
+// it's simply abandoned in favor of a fresh random pair. Generous enough
+// for D1's per-lookup latency (a few ms per node visited, up to ~48 nodes
+// per search) to not itself become the reason attempts get cut short.
+const PER_ATTEMPT_TIMEOUT_MS = 5000
 // Stop starting new attempts once this much time has passed, leaving
-// enough headroom under the api route's own outer timeout for whichever
-// attempt is still in flight to be aborted cleanly.
-const GENERATION_DEADLINE_MS = 15000
+// enough headroom under the api route's own outer timeout (see
+// GENERATION_TIMEOUT_MS in difficulty.get.ts) for whichever attempt is
+// still in flight to be aborted cleanly.
+const GENERATION_DEADLINE_MS = 20000
 
 export async function getDifficultyChallenge(
   difficulty: DifficultyLevel,

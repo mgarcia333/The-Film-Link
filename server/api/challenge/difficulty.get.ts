@@ -9,8 +9,11 @@ const VALID_DIFFICULTIES: DifficultyLevel[] = ['easy', 'normal', 'difficult']
 // Generous but bounded: generation runs a search-and-retry loop server-side,
 // so it deserves more room than the single-pair validate budget, but must
 // never hang indefinitely. Only reached on the cold-pool fallback path
-// below - the common case is a KV read, nowhere near this budget.
-const GENERATION_TIMEOUT_MS = 20000
+// below - the common case is a cache read, nowhere near this budget. Kept
+// comfortably above generate.ts's own GENERATION_DEADLINE_MS + one more
+// PER_ATTEMPT_TIMEOUT_MS, so this outer clock is never what cuts a
+// generation off first.
+const GENERATION_TIMEOUT_MS = 28000
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -19,8 +22,8 @@ export default defineEventHandler(async (event) => {
     : 'normal') as DifficultyLevel
   const language = typeof query.lang === 'string' ? query.lang : 'es-ES'
 
-  // Fast path: a challenge is already sitting ready in KV from a previous
-  // background refill, so serving it is just a KV read plus (if the
+  // Fast path: a challenge is already sitting ready in the cache from a
+  // previous background refill, so serving it is just a cache read plus (if the
   // display language differs) localizing two already-known movie ids - no
   // live search, no TMDB fan-out, no wait. Refilling the slot this just
   // emptied happens after the response is sent, never before.
