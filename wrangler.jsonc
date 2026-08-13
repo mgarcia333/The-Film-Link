@@ -8,11 +8,12 @@
     "directory": "./.output/public",
     "binding": "ASSETS"
   },
-  "kv_namespaces": [
+  "d1_databases": [
     {
-      "binding": "GAME_KV",
-      "id": "ed0ffa76858d4c419eb536f931139294",
-      "preview_id": "d4dc68310ff0439485070e333bf95abd"
+      "binding": "CACHE_DB",
+      "database_name": "the-film-link-cache",
+      "database_id": "32fd21a8-aa1f-4c5c-af33-cbd2893498e9",
+      "migrations_dir": "migrations"
     }
   ],
   // Precomputes the daily challenge shortly after UTC midnight (05:00 UTC).

@@ -27,12 +27,9 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'cloudflare_module',
-    storage: {
-      gameKv: {
-        driver: 'cloudflare-kv-binding',
-        binding: 'GAME_KV',
-      },
-    },
+    // No nitro.storage entry needed here: the cache reads the CACHE_DB (D1)
+    // binding directly off the Cloudflare execution env (see kv-cache.ts)
+    // rather than going through Nitro's useStorage abstraction.
     experimental: {
       tasks: true,
     },

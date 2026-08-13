@@ -1,7 +1,7 @@
 import type { DifficultyLevel } from '~~/types/difficulty'
+import { getCacheValue, setCacheValue } from '../kv-cache'
 import { type DifficultyChallenge, generateDifficultyChallenge } from './generate'
 
-const KV_MOUNT = 'gameKv'
 // How many ready-to-serve challenges each tier keeps on hand. Small on
 // purpose: this only needs to absorb the gap between a player clicking and
 // the next background refill landing, not act as a long-term cache.
@@ -12,19 +12,19 @@ function poolKey(difficulty: DifficultyLevel): string {
 }
 
 async function readPool(difficulty: DifficultyLevel): Promise<DifficultyChallenge[]> {
-  const pool = await useStorage(KV_MOUNT).getItem<DifficultyChallenge[]>(poolKey(difficulty))
+  const pool = await getCacheValue<DifficultyChallenge[]>(poolKey(difficulty))
   return pool ?? []
 }
 
 async function writePool(difficulty: DifficultyLevel, pool: DifficultyChallenge[]): Promise<void> {
-  await useStorage(KV_MOUNT).setItem(poolKey(difficulty), pool)
+  await setCacheValue(poolKey(difficulty), pool)
 }
 
 // Takes one ready-made challenge off the front of the pool, if any is
-// available. Not perfectly race-safe under concurrent pops - Cloudflare KV
-// has no compare-and-swap, the same trade-off acknowledged for acquireLock
-// in kv-cache.ts - but the worst case here is two players occasionally
-// getting the same pair, which is harmless for this game.
+// available. Not perfectly race-safe under concurrent pops - see
+// acquireLock in kv-cache.ts for the same read-then-write trade-off - but
+// the worst case here is two players occasionally getting the same pair,
+// which is harmless for this game.
 export async function popFromPool(difficulty: DifficultyLevel): Promise<DifficultyChallenge | null> {
   const pool = await readPool(difficulty)
   const next = pool[0]
