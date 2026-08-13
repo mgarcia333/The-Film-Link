@@ -1,18 +1,15 @@
 import type { TmdbMovieSummary, TmdbSearchMoviesResponse } from '~~/types/tmdb'
 import { tmdbFetch } from './client'
 
-export interface MovieSearchResult {
-  id: number
-  title: string
-  posterPath: string | null
-  releaseYear: number | null
-}
-
+// Returned as the full TMDB summary (not trimmed down) because the client
+// selects a movie here and later resends it verbatim to the path-finding
+// validation endpoint, which needs vote_count/genre_ids/release_date to
+// judge whether the seed movie is eligible to appear in a filmography.
 export async function searchMovies(
   query: string,
   language = 'es-ES',
   signal?: AbortSignal,
-): Promise<MovieSearchResult[]> {
+): Promise<TmdbMovieSummary[]> {
   const trimmedQuery = query.trim()
   if (!trimmedQuery) {
     return []
@@ -24,14 +21,5 @@ export async function searchMovies(
     signal,
   )
 
-  return response.results.map(toSearchResult)
-}
-
-function toSearchResult(movie: TmdbMovieSummary): MovieSearchResult {
-  return {
-    id: movie.id,
-    title: movie.title,
-    posterPath: movie.poster_path,
-    releaseYear: movie.release_date ? new Date(movie.release_date).getUTCFullYear() : null,
-  }
+  return response.results
 }
