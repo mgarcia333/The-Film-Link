@@ -60,5 +60,9 @@
   },
   "common": {
     "backHome": "torna alla home"
+  },
+  "theme": {
+    "light": "chiaro",
+    "dark": "scuro"
   }
 }
