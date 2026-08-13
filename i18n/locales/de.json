@@ -1,0 +1,64 @@
+{
+  "app": {
+    "tagline": "verbinde zwei filme über besetzung und crew, in möglichst wenigen schritten."
+  },
+  "nav": {
+    "dailyChallenge": "tägliche herausforderung",
+    "personalizedChallenge": "eigene herausforderung",
+    "stats": "statistik"
+  },
+  "search": {
+    "salidaLabel": "startfilm",
+    "destinoLabel": "zielfilm",
+    "searching": "suche...",
+    "searchFailed": "suche fehlgeschlagen. bitte erneut versuchen.",
+    "noResults": "keine ergebnisse.",
+    "change": "ändern"
+  },
+  "personalized": {
+    "subtitle": "wähle den startfilm und den zielfilm.",
+    "sameMovie": "wähle zwei unterschiedliche filme.",
+    "notConnected": "diese beiden filme sind nicht innerhalb von drei schritten verbunden. versuche ein anderes paar.",
+    "validationFailed": "verbindung konnte nicht geprüft werden. bitte erneut versuchen.",
+    "checking": "verbindung wird geprüft...",
+    "start": "starten",
+    "cancel": "abbrechen"
+  },
+  "game": {
+    "youAreAtMovie": "du bist bei",
+    "youPicked": "du hast gewählt",
+    "undo": "rückgängig",
+    "surrender": "aufgeben",
+    "destinationLabel": "ziel: {title}",
+    "loadingOptions": "optionen werden geladen...",
+    "optionsFailed": "optionen konnten nicht geladen werden. bitte erneut versuchen.",
+    "noOptions": "hier sind keine optionen verfügbar.",
+    "cast": "besetzung",
+    "director": "regie"
+  },
+  "result": {
+    "won": "du hast gewonnen",
+    "surrendered": "du hast aufgegeben",
+    "stepsTaken": "schritte gebraucht",
+    "optimal": "optimal",
+    "yourPath": "dein weg",
+    "calculatingOptimal": "kürzester weg wird berechnet...",
+    "optimalFailed": "der kürzeste weg konnte nicht berechnet werden.",
+    "shortestPossible": "kürzestmöglicher weg",
+    "playAgain": "nochmal spielen"
+  },
+  "daily": {
+    "alreadyPlayed": "du hast die heutige herausforderung bereits gespielt. komm morgen wieder.",
+    "preparing": "die heutige herausforderung wird vorbereitet...",
+    "loadFailed": "die heutige herausforderung konnte nicht geladen werden. bitte erneut versuchen."
+  },
+  "stats": {
+    "currentStreak": "aktuelle serie",
+    "longestStreak": "beste serie",
+    "played": "gespielt",
+    "won": "gewonnen"
+  },
+  "common": {
+    "backHome": "zurück zur startseite"
+  }
+}

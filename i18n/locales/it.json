@@ -1,0 +1,64 @@
+{
+  "app": {
+    "tagline": "collega due film incatenando cast e regia, nel minor numero di passi possibile."
+  },
+  "nav": {
+    "dailyChallenge": "sfida del giorno",
+    "personalizedChallenge": "sfida personalizzata",
+    "stats": "statistiche"
+  },
+  "search": {
+    "salidaLabel": "film di partenza",
+    "destinoLabel": "film di destinazione",
+    "searching": "ricerca in corso...",
+    "searchFailed": "ricerca non riuscita. riprova.",
+    "noResults": "nessun risultato.",
+    "change": "cambia"
+  },
+  "personalized": {
+    "subtitle": "scegli il film di partenza e il film di destinazione.",
+    "sameMovie": "scegli due film diversi.",
+    "notConnected": "questi due film non sono collegati entro tre salti. prova un'altra coppia.",
+    "validationFailed": "non è stato possibile verificare il collegamento. riprova.",
+    "checking": "verifica del collegamento...",
+    "start": "inizia",
+    "cancel": "annulla"
+  },
+  "game": {
+    "youAreAtMovie": "sei su",
+    "youPicked": "hai scelto",
+    "undo": "annulla",
+    "surrender": "arrenditi",
+    "destinationLabel": "destinazione: {title}",
+    "loadingOptions": "caricamento opzioni...",
+    "optionsFailed": "non è stato possibile caricare le opzioni. riprova.",
+    "noOptions": "nessuna opzione disponibile qui.",
+    "cast": "cast",
+    "director": "regia"
+  },
+  "result": {
+    "won": "hai vinto",
+    "surrendered": "ti sei arreso",
+    "stepsTaken": "passi fatti",
+    "optimal": "ottimale",
+    "yourPath": "il tuo percorso",
+    "calculatingOptimal": "calcolo del percorso più breve...",
+    "optimalFailed": "non è stato possibile calcolare il percorso più breve.",
+    "shortestPossible": "percorso più breve possibile",
+    "playAgain": "gioca ancora"
+  },
+  "daily": {
+    "alreadyPlayed": "hai già giocato la sfida di oggi. torna domani.",
+    "preparing": "preparazione della sfida di oggi...",
+    "loadFailed": "non è stato possibile caricare la sfida di oggi. riprova."
+  },
+  "stats": {
+    "currentStreak": "serie attuale",
+    "longestStreak": "miglior serie",
+    "played": "giocate",
+    "won": "vinte"
+  },
+  "common": {
+    "backHome": "torna alla home"
+  }
+}

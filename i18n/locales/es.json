@@ -1,0 +1,64 @@
+{
+  "app": {
+    "tagline": "conecta dos películas encadenando reparto y dirección, en el menor número de pasos posible."
+  },
+  "nav": {
+    "dailyChallenge": "reto diario",
+    "personalizedChallenge": "reto personalizado",
+    "stats": "estadísticas"
+  },
+  "search": {
+    "salidaLabel": "salida",
+    "destinoLabel": "destino",
+    "searching": "buscando...",
+    "searchFailed": "no se ha podido buscar. inténtalo de nuevo.",
+    "noResults": "sin resultados.",
+    "change": "cambiar"
+  },
+  "personalized": {
+    "subtitle": "elige la película de salida y la película de destino.",
+    "sameMovie": "elige dos películas distintas.",
+    "notConnected": "estas dos películas no tienen conexión en tres saltos. prueba con otra.",
+    "validationFailed": "no se ha podido comprobar la conexión. inténtalo de nuevo.",
+    "checking": "comprobando conexión...",
+    "start": "empezar",
+    "cancel": "cancelar"
+  },
+  "game": {
+    "youAreAtMovie": "estás en",
+    "youPicked": "has elegido a",
+    "undo": "deshacer",
+    "surrender": "rendirse",
+    "destinationLabel": "destino: {title}",
+    "loadingOptions": "cargando opciones...",
+    "optionsFailed": "no se han podido cargar las opciones. inténtalo de nuevo.",
+    "noOptions": "no hay opciones disponibles aquí.",
+    "cast": "reparto",
+    "director": "dirección"
+  },
+  "result": {
+    "won": "has ganado",
+    "surrendered": "te has rendido",
+    "stepsTaken": "pasos dados",
+    "optimal": "óptimo",
+    "yourPath": "tu camino",
+    "calculatingOptimal": "calculando el camino más corto...",
+    "optimalFailed": "no se ha podido calcular el camino más corto.",
+    "shortestPossible": "camino más corto posible",
+    "playAgain": "jugar de nuevo"
+  },
+  "daily": {
+    "alreadyPlayed": "ya has jugado el reto de hoy. vuelve mañana.",
+    "preparing": "preparando el reto de hoy...",
+    "loadFailed": "no se ha podido cargar el reto de hoy. inténtalo de nuevo."
+  },
+  "stats": {
+    "currentStreak": "racha actual",
+    "longestStreak": "mejor racha",
+    "played": "jugados",
+    "won": "ganados"
+  },
+  "common": {
+    "backHome": "volver al inicio"
+  }
+}
