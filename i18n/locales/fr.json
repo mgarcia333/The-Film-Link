@@ -31,6 +31,7 @@
     "loadingOptions": "chargement des options...",
     "optionsFailed": "impossible de charger les options. réessayez.",
     "noOptions": "aucune option disponible ici.",
+    "filterPlaceholder": "rechercher...",
     "cast": "distribution",
     "director": "réalisation"
   },
@@ -72,7 +73,7 @@
     "dark": "sombre"
   },
   "auth": {
-    "signIn": "se connecter avec Google",
+    "signIn": "se connecter",
     "signOut": "se déconnecter"
   }
 }

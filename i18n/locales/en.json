@@ -31,6 +31,7 @@
     "loadingOptions": "loading options...",
     "optionsFailed": "couldn't load the options. try again.",
     "noOptions": "no options available here.",
+    "filterPlaceholder": "search...",
     "cast": "cast",
     "director": "director"
   },
@@ -72,7 +73,7 @@
     "dark": "dark"
   },
   "auth": {
-    "signIn": "sign in with Google",
+    "signIn": "sign in",
     "signOut": "sign out"
   }
 }

@@ -31,6 +31,7 @@
     "loadingOptions": "cargando opciones...",
     "optionsFailed": "no se han podido cargar las opciones. inténtalo de nuevo.",
     "noOptions": "no hay opciones disponibles aquí.",
+    "filterPlaceholder": "buscar...",
     "cast": "reparto",
     "director": "dirección"
   },
@@ -72,7 +73,7 @@
     "dark": "oscuro"
   },
   "auth": {
-    "signIn": "iniciar sesión con Google",
+    "signIn": "iniciar sesión",
     "signOut": "cerrar sesión"
   }
 }

@@ -31,6 +31,7 @@
     "loadingOptions": "optionen werden geladen...",
     "optionsFailed": "optionen konnten nicht geladen werden. bitte erneut versuchen.",
     "noOptions": "hier sind keine optionen verfügbar.",
+    "filterPlaceholder": "suchen...",
     "cast": "besetzung",
     "director": "regie"
   },
@@ -72,7 +73,7 @@
     "dark": "dunkel"
   },
   "auth": {
-    "signIn": "mit Google anmelden",
+    "signIn": "anmelden",
     "signOut": "abmelden"
   }
 }

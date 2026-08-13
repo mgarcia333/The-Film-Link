@@ -31,6 +31,7 @@
     "loadingOptions": "caricamento opzioni...",
     "optionsFailed": "non è stato possibile caricare le opzioni. riprova.",
     "noOptions": "nessuna opzione disponibile qui.",
+    "filterPlaceholder": "cerca...",
     "cast": "cast",
     "director": "regia"
   },
@@ -72,7 +73,7 @@
     "dark": "scuro"
   },
   "auth": {
-    "signIn": "accedi con Google",
+    "signIn": "accedi",
     "signOut": "esci"
   }
 }

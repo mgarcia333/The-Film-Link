@@ -31,6 +31,7 @@
     "loadingOptions": "a carregar opções...",
     "optionsFailed": "não foi possível carregar as opções. tenta novamente.",
     "noOptions": "não há opções disponíveis aqui.",
+    "filterPlaceholder": "pesquisar...",
     "cast": "elenco",
     "director": "realização"
   },
@@ -72,7 +73,7 @@
     "dark": "escuro"
   },
   "auth": {
-    "signIn": "iniciar sessão com Google",
+    "signIn": "iniciar sessão",
     "signOut": "terminar sessão"
   }
 }
