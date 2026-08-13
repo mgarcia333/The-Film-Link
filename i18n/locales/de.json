@@ -60,5 +60,9 @@
   },
   "common": {
     "backHome": "zurück zur startseite"
+  },
+  "theme": {
+    "light": "hell",
+    "dark": "dunkel"
   }
 }
