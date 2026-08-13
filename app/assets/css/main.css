@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+/*
+ * Theme tokens. Light values live on :root, dark values apply either from
+ * system preference (prefers-color-scheme) or from an explicit
+ * `data-theme` attribute set by the manual theme switch, which always wins.
+ */
+:root {
+  --bg: #e8e6df;
+  --surface: #f4f3ef;
+  --border: #c3bfb4;
+  --ink: #191a17;
+  --ink-muted: #5c5b54;
+  --accent: #1f5f4e;
+  --highlight: #c98a00;
+  --danger: #8c2b23;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #101311;
+    --surface: #181c19;
+    --border: #2c312d;
+    --ink: #e7e5dd;
+    --ink-muted: #8e938c;
+    --accent: #6fbf9e;
+    --highlight: #e3a72c;
+    --danger: #c4564b;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #101311;
+  --surface: #181c19;
+  --border: #2c312d;
+  --ink: #e7e5dd;
+  --ink-muted: #8e938c;
+  --accent: #6fbf9e;
+  --highlight: #e3a72c;
+  --danger: #c4564b;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-highlight: var(--highlight);
+  --color-danger: var(--danger);
+
+  --font-heading: 'Archivo', sans-serif;
+  --font-sans: 'Public Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* the cast sheet look has no rounded corners */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
