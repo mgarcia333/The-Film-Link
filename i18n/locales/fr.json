@@ -4,6 +4,7 @@
   },
   "nav": {
     "dailyChallenge": "défi du jour",
+    "difficultyChallenge": "défi par difficulté",
     "personalizedChallenge": "défi personnalisé",
     "stats": "statistiques"
   },
@@ -51,6 +52,14 @@
     "alreadyPlayed": "vous avez déjà joué le défi du jour. revenez demain.",
     "preparing": "préparation du défi du jour...",
     "loadFailed": "impossible de charger le défi du jour. réessayez."
+  },
+  "difficulty": {
+    "subtitle": "choisissez un niveau de difficulté.",
+    "easy": "facile (films connus)",
+    "normal": "normal (films populaires)",
+    "difficult": "difficile (films moins connus)",
+    "loading": "chargement...",
+    "loadFailed": "impossible de charger le défi. réessayez."
   },
   "stats": {
     "currentStreak": "série en cours",

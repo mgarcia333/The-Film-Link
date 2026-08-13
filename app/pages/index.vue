@@ -20,6 +20,12 @@
         {{ $t('nav.dailyChallenge') }}
       </NuxtLink>
       <NuxtLink
+        to="/play/difficulty"
+        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
+      >
+        {{ $t('nav.difficultyChallenge') }}
+      </NuxtLink>
+      <NuxtLink
         to="/play/personalized"
         class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
       >

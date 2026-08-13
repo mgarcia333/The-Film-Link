@@ -4,6 +4,7 @@
   },
   "nav": {
     "dailyChallenge": "daily challenge",
+    "difficultyChallenge": "challenge by difficulty",
     "personalizedChallenge": "custom challenge",
     "stats": "stats"
   },
@@ -51,6 +52,14 @@
     "alreadyPlayed": "you've already played today's challenge. come back tomorrow.",
     "preparing": "preparing today's challenge...",
     "loadFailed": "couldn't load today's challenge. try again."
+  },
+  "difficulty": {
+    "subtitle": "choose a difficulty level.",
+    "easy": "easy (well-known films)",
+    "normal": "normal (popular films)",
+    "difficult": "difficult (lesser-known films)",
+    "loading": "loading...",
+    "loadFailed": "couldn't load the challenge. try again."
   },
   "stats": {
     "currentStreak": "current streak",

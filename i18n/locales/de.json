@@ -4,6 +4,7 @@
   },
   "nav": {
     "dailyChallenge": "tägliche herausforderung",
+    "difficultyChallenge": "herausforderung nach schwierigkeit",
     "personalizedChallenge": "eigene herausforderung",
     "stats": "statistik"
   },
@@ -51,6 +52,14 @@
     "alreadyPlayed": "du hast die heutige herausforderung bereits gespielt. komm morgen wieder.",
     "preparing": "die heutige herausforderung wird vorbereitet...",
     "loadFailed": "die heutige herausforderung konnte nicht geladen werden. bitte erneut versuchen."
+  },
+  "difficulty": {
+    "subtitle": "wähle einen schwierigkeitsgrad.",
+    "easy": "einfach (bekannte filme)",
+    "normal": "normal (beliebte filme)",
+    "difficult": "schwierig (weniger bekannte filme)",
+    "loading": "wird geladen...",
+    "loadFailed": "die herausforderung konnte nicht geladen werden. bitte erneut versuchen."
   },
   "stats": {
     "currentStreak": "aktuelle serie",
