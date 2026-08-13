@@ -26,11 +26,8 @@
     "cancel": "cancelar"
   },
   "game": {
-    "youAreAtMovie": "estás en",
-    "youPicked": "has elegido a",
     "undo": "deshacer",
     "surrender": "rendirse",
-    "destinationLabel": "destino: {title}",
     "loadingOptions": "cargando opciones...",
     "optionsFailed": "no se han podido cargar las opciones. inténtalo de nuevo.",
     "noOptions": "no hay opciones disponibles aquí.",
@@ -55,9 +52,9 @@
   },
   "difficulty": {
     "subtitle": "elige un nivel de dificultad.",
-    "easy": "fácil (películas conocidas)",
-    "normal": "normal (películas populares)",
-    "difficult": "difícil (películas menos conocidas)",
+    "easy": "fácil",
+    "normal": "normal",
+    "difficult": "difícil",
     "loading": "cargando...",
     "loadFailed": "no se ha podido cargar el reto. inténtalo de nuevo."
   },

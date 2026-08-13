@@ -36,7 +36,8 @@ onMounted(() => {
 
 const options = ref<Option[]>([])
 const visitedMovieIds = computed(() => new Set(gameStore.playedPath.filter(node => node.kind === 'movie').map(node => node.id)))
-const currentImageUrl = computed(() => tmdbImageUrl(gameStore.currentNode?.imagePath ?? null, 'w342'))
+const sourceImageUrl = computed(() => tmdbImageUrl(gameStore.sourceMovie?.poster_path ?? null, 'w342'))
+const destinationImageUrl = computed(() => tmdbImageUrl(gameStore.destinationMovie?.poster_path ?? null, 'w342'))
 
 async function loadOptions() {
   const node = gameStore.currentNode
@@ -97,10 +98,7 @@ async function undo() {
     v-if="gameStore.status === 'playing'"
     class="mx-auto flex min-h-dvh max-w-md flex-col gap-4 px-4 py-8"
   >
-    <header class="flex items-start justify-between gap-3">
-      <p class="font-sans text-sm text-ink-muted">
-        {{ $t('game.destinationLabel', { title: gameStore.destinationMovie?.title }) }}
-      </p>
+    <header class="flex items-center justify-end">
       <p class="shrink-0 font-mono text-2xl tabular-nums text-ink">
         {{ formatNumber(gameStore.stepsTaken, locale) }}
       </p>
@@ -108,9 +106,9 @@ async function undo() {
 
     <div class="flex items-center gap-3">
       <img
-        v-if="currentImageUrl"
-        :src="currentImageUrl"
-        :alt="gameStore.currentNode?.name"
+        v-if="sourceImageUrl"
+        :src="sourceImageUrl"
+        :alt="gameStore.sourceMovie?.title"
         class="h-24 w-16 shrink-0 border border-border object-cover"
       >
       <div
@@ -118,8 +116,8 @@ async function undo() {
         class="h-24 w-16 shrink-0 border border-border"
       />
       <p class="font-sans text-sm text-ink-muted">
-        {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
-        <span class="block font-heading text-lg text-highlight">{{ gameStore.currentNode?.name }}</span>
+        {{ $t('search.salidaLabel') }}
+        <span class="block font-heading text-lg text-ink">{{ gameStore.sourceMovie?.title }}</span>
       </p>
     </div>
 
@@ -127,6 +125,23 @@ async function undo() {
       :path="gameStore.playedPath"
       highlight-active
     />
+
+    <div class="flex items-center gap-3">
+      <img
+        v-if="destinationImageUrl"
+        :src="destinationImageUrl"
+        :alt="gameStore.destinationMovie?.title"
+        class="h-24 w-16 shrink-0 border border-border object-cover"
+      >
+      <div
+        v-else
+        class="h-24 w-16 shrink-0 border border-border"
+      />
+      <p class="font-sans text-sm text-ink-muted">
+        {{ $t('search.destinoLabel') }}
+        <span class="block font-heading text-lg text-ink">{{ gameStore.destinationMovie?.title }}</span>
+      </p>
+    </div>
 
     <div class="flex items-center gap-3">
       <button

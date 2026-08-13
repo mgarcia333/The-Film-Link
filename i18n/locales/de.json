@@ -26,11 +26,8 @@
     "cancel": "abbrechen"
   },
   "game": {
-    "youAreAtMovie": "du bist bei",
-    "youPicked": "du hast gewählt",
     "undo": "rückgängig",
     "surrender": "aufgeben",
-    "destinationLabel": "ziel: {title}",
     "loadingOptions": "optionen werden geladen...",
     "optionsFailed": "optionen konnten nicht geladen werden. bitte erneut versuchen.",
     "noOptions": "hier sind keine optionen verfügbar.",

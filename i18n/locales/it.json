@@ -26,11 +26,8 @@
     "cancel": "annulla"
   },
   "game": {
-    "youAreAtMovie": "sei su",
-    "youPicked": "hai scelto",
     "undo": "annulla",
     "surrender": "arrenditi",
-    "destinationLabel": "destinazione: {title}",
     "loadingOptions": "caricamento opzioni...",
     "optionsFailed": "non è stato possibile caricare le opzioni. riprova.",
     "noOptions": "nessuna opzione disponibile qui.",
