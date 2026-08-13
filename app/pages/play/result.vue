@@ -28,6 +28,25 @@ onMounted(async () => {
   }
 })
 
+function nodeKey(node: { kind: string, id: number }): string {
+  return `${node.kind}:${node.id}`
+}
+
+const matchingIds = computed(() => {
+  if (!gameStore.optimalPath) {
+    return new Set<string>()
+  }
+  const optimalKeys = new Set(gameStore.optimalPath.map(nodeKey))
+  const matches = new Set<string>()
+  for (const node of gameStore.playedPath) {
+    const key = nodeKey(node)
+    if (optimalKeys.has(key)) {
+      matches.add(key)
+    }
+  }
+  return matches
+})
+
 async function playAgain() {
   const wasDaily = gameStore.mode === 'daily'
   gameStore.reset()
@@ -56,7 +75,10 @@ async function playAgain() {
       <h2 class="font-heading text-xs uppercase tracking-widest text-ink-muted">
         {{ $t('result.yourPath') }}
       </h2>
-      <CreditsRoll :path="gameStore.playedPath" />
+      <CreditsRoll
+        :path="gameStore.playedPath"
+        :highlighted-ids="matchingIds"
+      />
     </section>
 
     <section
@@ -78,7 +100,10 @@ async function playAgain() {
       <h2 class="font-heading text-xs uppercase tracking-widest text-ink-muted">
         {{ $t('result.shortestPossible') }}
       </h2>
-      <CreditsRoll :path="gameStore.optimalPath" />
+      <CreditsRoll
+        :path="gameStore.optimalPath"
+        :highlighted-ids="matchingIds"
+      />
     </section>
 
     <button
