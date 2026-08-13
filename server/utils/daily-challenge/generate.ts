@@ -2,7 +2,7 @@ import type { TmdbMovieSummary } from '~~/types/tmdb'
 import { findPathBetweenMovies } from '../path-finding/validate'
 import { getMovieDetails } from '../tmdb/movie-details'
 import { acquireLock, getOrSetCache, releaseLock, waitForCacheKey } from '../kv-cache'
-import { getPopularMoviePool } from './candidates'
+import { getRecognizableMoviePool } from './candidates'
 import { createSeededRandom, hashStringToSeed } from './random'
 
 // "camino óptimo de 2 o 3 películas intermedias"
@@ -62,7 +62,7 @@ function getCanonicalDailyChallenge(date: string, signal?: AbortSignal): Promise
 }
 
 async function generateDailyChallenge(date: string, signal?: AbortSignal): Promise<DailyChallenge> {
-  const pool = await getPopularMoviePool(DAILY_CHALLENGE_GENERATION_LANGUAGE, signal)
+  const pool = await getRecognizableMoviePool(DAILY_CHALLENGE_GENERATION_LANGUAGE, signal)
   if (pool.length < 2) {
     throw new Error('Not enough eligible candidate movies to build a daily challenge')
   }

@@ -1,18 +1,15 @@
-import type { TmdbMovieSummary, TmdbSearchMoviesResponse } from '~~/types/tmdb'
-import { tmdbFetch } from '../tmdb/client'
-import { isEligibleMovie } from '../tmdb/pruning'
+import type { TmdbMovieSummary } from '~~/types/tmdb'
+import { getMoviePool } from '../tmdb/movie-pool'
 
-const CANDIDATE_POOL_PAGES = 5
+// High vote_count floor so the daily challenge lands on films almost
+// everyone recognizes, not whatever happens to be trending this week.
+const DAILY_POOL_CONFIG = {
+  sortBy: 'vote_count.desc' as const,
+  minVoteCount: 3000,
+  pageStart: 1,
+  pageEnd: 5,
+}
 
-export async function getPopularMoviePool(language: string, signal?: AbortSignal): Promise<TmdbMovieSummary[]> {
-  const pages = await Promise.all(
-    Array.from({ length: CANDIDATE_POOL_PAGES }, (_, index) =>
-      tmdbFetch<TmdbSearchMoviesResponse>(
-        '/discover/movie',
-        { language, page: index + 1, sort_by: 'popularity.desc' },
-        signal,
-      )),
-  )
-
-  return pages.flatMap(page => page.results).filter(isEligibleMovie)
+export function getRecognizableMoviePool(language: string, signal?: AbortSignal): Promise<TmdbMovieSummary[]> {
+  return getMoviePool(`pool:daily:${language}`, DAILY_POOL_CONFIG, language, signal)
 }
