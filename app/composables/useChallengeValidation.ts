@@ -1,6 +1,7 @@
 import type { TmdbMovieSummary } from '~~/types/tmdb'
 
 export function useChallengeValidation() {
+  const { locale } = useI18n()
   const pending = ref(false)
   const errorCode = ref<string | null>(null)
 
@@ -15,7 +16,7 @@ export function useChallengeValidation() {
     try {
       const result = await $fetch<{ connected: boolean }>('/api/challenge/validate', {
         method: 'POST',
-        body: { source, destination },
+        body: { source, destination, language: toTmdbLanguage(locale.value) },
         signal: controller.signal,
       })
       return result.connected

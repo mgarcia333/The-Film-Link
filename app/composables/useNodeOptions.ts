@@ -14,6 +14,7 @@ export interface FilmographyOption {
 }
 
 export function useNodeOptions() {
+  const { locale } = useI18n()
   const pending = ref(false)
   const failed = ref(false)
 
@@ -26,7 +27,10 @@ export function useNodeOptions() {
     failed.value = false
 
     try {
-      return await $fetch<T[]>(url, { signal: controller.signal })
+      return await $fetch<T[]>(url, {
+        query: { lang: toTmdbLanguage(locale.value) },
+        signal: controller.signal,
+      })
     }
     catch (error) {
       if (isAbortError(error)) {
