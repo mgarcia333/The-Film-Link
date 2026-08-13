@@ -31,6 +31,15 @@ export default defineNuxtConfig({
         binding: 'GAME_KV',
       },
     },
+    experimental: {
+      tasks: true,
+    },
+    // Optional: precomputes the daily challenge shortly after UTC midnight
+    // so the first visitor doesn't pay the generation cost. Not required -
+    // getDailyChallenge() also generates lazily on first request.
+    scheduledTasks: {
+      '5 0 * * *': ['warm-daily-challenge'],
+    },
   },
 
   vite: {
