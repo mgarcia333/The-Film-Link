@@ -57,44 +57,66 @@ function nodeClass(node: GamePathNode | null): string {
   }
   return 'text-ink'
 }
+
+function thumbnail(node: GamePathNode | null): string | null {
+  return node ? tmdbImageUrl(node.imagePath, 'w92') : null
+}
 </script>
 
 <template>
   <div class="flex flex-col border border-border bg-surface">
     <div
       v-if="sourceMovie"
-      class="flex items-baseline gap-2 px-3 py-2"
+      class="flex items-center gap-2 px-3 py-2"
       :class="{ 'border-b border-dotted border-border': steps.length > 0 }"
     >
       <span class="shrink-0 font-mono text-xs text-ink-muted">{{ $t('search.salidaLabel') }}</span>
       <span
         aria-hidden="true"
-        class="min-w-2 flex-1 -translate-y-1 border-b border-dotted border-border"
+        class="min-w-2 flex-1 border-b border-dotted border-border"
       />
       <span
-        class="max-w-[60%] shrink truncate text-right font-sans text-sm transition-colors duration-[120ms]"
+        class="max-w-[55%] shrink truncate text-right font-sans text-sm transition-colors duration-[120ms]"
         :class="nodeClass(sourceMovie)"
       >{{ sourceMovie.name }}</span>
+      <img
+        v-if="thumbnail(sourceMovie)"
+        :src="thumbnail(sourceMovie) ?? undefined"
+        :alt="sourceMovie.name"
+        class="h-9 w-9 shrink-0 border border-border object-cover"
+      >
     </div>
 
     <div
       v-for="step in steps"
       :key="step.index"
-      class="flex items-baseline gap-2 border-b border-dotted border-border px-3 py-2 last:border-b-0"
+      class="flex items-center gap-2 border-b border-dotted border-border px-3 py-2 last:border-b-0"
     >
-      <span class="w-5 shrink-0 font-mono text-xs text-ink-muted">{{ formatNumber(step.index, locale) }}</span>
+      <span class="w-4 shrink-0 font-mono text-xs text-ink-muted">{{ formatNumber(step.index, locale) }}</span>
+      <img
+        v-if="thumbnail(step.person)"
+        :src="thumbnail(step.person) ?? undefined"
+        :alt="step.person?.name"
+        class="h-9 w-9 shrink-0 border border-border object-cover"
+      >
       <span
-        class="max-w-[38%] shrink truncate font-sans text-sm transition-colors duration-[120ms]"
+        class="max-w-[32%] shrink truncate font-sans text-sm transition-colors duration-[120ms]"
         :class="nodeClass(step.person)"
       >{{ step.person?.name }}</span>
       <span
         aria-hidden="true"
-        class="min-w-2 flex-1 -translate-y-1 border-b border-dotted border-border"
+        class="min-w-2 flex-1 border-b border-dotted border-border"
       />
       <span
-        class="max-w-[38%] shrink truncate text-right font-sans text-sm transition-colors duration-[120ms]"
+        class="max-w-[32%] shrink truncate text-right font-sans text-sm transition-colors duration-[120ms]"
         :class="nodeClass(step.movie)"
       >{{ step.movie?.name }}</span>
+      <img
+        v-if="thumbnail(step.movie)"
+        :src="thumbnail(step.movie) ?? undefined"
+        :alt="step.movie?.name"
+        class="h-9 w-9 shrink-0 border border-border object-cover"
+      >
     </div>
   </div>
 </template>
