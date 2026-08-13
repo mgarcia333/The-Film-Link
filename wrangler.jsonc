@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "the-film-link",
+  "main": "./.output/server/index.mjs",
+  "compatibility_date": "2025-07-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./.output/public",
+    "binding": "ASSETS"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "GAME_KV",
+      // placeholder id for local dev; replace with a real namespace before deploying
+      // (see README: `wrangler kv namespace create GAME_KV`)
+      "id": "00000000000000000000000000000000"
+    }
+  ]
+}

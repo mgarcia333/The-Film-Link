@@ -13,10 +13,20 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    tmdbApiKey: '',
+  },
+
   compatibilityDate: '2025-07-15',
 
   nitro: {
     preset: 'cloudflare_module',
+    storage: {
+      gameKv: {
+        driver: 'cloudflare-kv-binding',
+        binding: 'GAME_KV',
+      },
+    },
   },
 
   vite: {
