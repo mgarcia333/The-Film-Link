@@ -11,12 +11,8 @@
   "kv_namespaces": [
     {
       "binding": "GAME_KV",
-      // Create namespaces with:
-      // wrangler kv namespace create GAME_KV --preview false
-      // wrangler kv namespace create GAME_KV --preview true
-      // Then replace "id" and "preview_id" below with the returned IDs
-      "id": "00000000000000000000000000000000",
-      "preview_id": "00000000000000000000000000000000"
+      "id": "ed0ffa76858d4c419eb536f931139294",
+      "preview_id": "d4dc68310ff0439485070e333bf95abd"
     }
   ],
   // Precomputes the daily challenge shortly after UTC midnight (05:00 UTC).
