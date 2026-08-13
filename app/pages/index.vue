@@ -14,10 +14,22 @@
 
     <nav class="flex flex-col gap-3">
       <NuxtLink
+        to="/play/daily"
+        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
+      >
+        reto diario
+      </NuxtLink>
+      <NuxtLink
         to="/play/personalized"
         class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent"
       >
         reto personalizado
+      </NuxtLink>
+      <NuxtLink
+        to="/stats"
+        class="text-center font-sans text-xs uppercase tracking-widest text-ink-muted transition-colors duration-[120ms] hover:text-ink"
+      >
+        estadísticas
       </NuxtLink>
     </nav>
   </main>
