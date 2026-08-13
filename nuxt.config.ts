@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
+    'nuxt-auth-utils',
     'pinia-plugin-persistedstate/nuxt',
   ],
 
