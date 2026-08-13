@@ -39,7 +39,20 @@ const visitedMovieIds = computed(() => new Set(gameStore.playedPath.filter(node 
 const sourceImageUrl = computed(() => tmdbImageUrl(gameStore.sourceMovie?.poster_path ?? null, 'w342'))
 const destinationImageUrl = computed(() => tmdbImageUrl(gameStore.destinationMovie?.poster_path ?? null, 'w342'))
 
+// Filters the already-loaded options client-side rather than re-querying:
+// a prolific actor's filmography can run into the hundreds, and scrolling
+// through all of it to find one name is the exact wait this is meant to cut.
+const filterQuery = ref('')
+function normalizeForFilter(value: string): string {
+  return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+}
+const filteredOptions = computed(() => {
+  const needle = normalizeForFilter(filterQuery.value.trim())
+  return needle ? options.value.filter(option => normalizeForFilter(option.name).includes(needle)) : options.value
+})
+
 async function loadOptions() {
+  filterQuery.value = ''
   const node = gameStore.currentNode
   if (!node || gameStore.status !== 'playing') {
     options.value = []
@@ -181,15 +194,32 @@ async function undo() {
         {{ $t('game.noOptions') }}
       </p>
 
-      <ChoiceButton
-        v-for="option in options"
-        :key="`${option.kind}-${option.id}`"
-        :name="option.name"
-        :image-path="tmdbImageUrl(option.imagePath, 'w185')"
-        :subtitle="option.subtitle"
-        :disabled="option.used"
-        @select="choose(option)"
-      />
+      <template v-else>
+        <input
+          v-model="filterQuery"
+          type="text"
+          autocomplete="off"
+          :placeholder="$t('game.filterPlaceholder')"
+          class="w-full border border-border bg-surface px-3 py-2 font-sans text-sm text-ink outline-none focus:border-accent"
+        >
+
+        <p
+          v-if="filteredOptions.length === 0"
+          class="font-sans text-sm text-ink-muted"
+        >
+          {{ $t('search.noResults') }}
+        </p>
+
+        <ChoiceButton
+          v-for="option in filteredOptions"
+          :key="`${option.kind}-${option.id}`"
+          :name="option.name"
+          :image-path="tmdbImageUrl(option.imagePath, 'w185')"
+          :subtitle="option.subtitle"
+          :disabled="option.used"
+          @select="choose(option)"
+        />
+      </template>
     </div>
   </main>
 </template>
