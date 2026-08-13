@@ -1,38 +1,33 @@
 <script setup lang="ts">
+import type { DifficultyLevel } from '~~/types/difficulty'
+
 definePageMeta({ ssr: false })
 
 const { locale } = useI18n()
 const gameStore = useGameStore()
 
 const pending = ref(false)
+const pendingDifficulty = ref<DifficultyLevel | null>(null)
 const errorCode = ref<string | null>(null)
-const selectedDifficulty = ref<DifficultyLevel | null>(null)
-
-if (!gameStore.status) {
-  // Fresh start
-}
 
 async function startGame(difficulty: DifficultyLevel) {
-  selectedDifficulty.value = difficulty
   pending.value = true
+  pendingDifficulty.value = difficulty
   errorCode.value = null
 
   try {
     const challenge = await $fetch('/api/challenge/difficulty', {
-      query: {
-        difficulty,
-        lang: toTmdbLanguage(locale.value),
-      },
+      query: { difficulty, lang: toTmdbLanguage(locale.value) },
     })
     gameStore.startGame(challenge.source, challenge.destination, 'difficulty', null, difficulty)
     await navigateTo('/play/game')
   }
-  catch (error) {
+  catch {
     errorCode.value = 'UNKNOWN'
-    console.error('Failed to load difficulty challenge:', error)
   }
   finally {
     pending.value = false
+    pendingDifficulty.value = null
   }
 }
 </script>
@@ -50,36 +45,36 @@ async function startGame(difficulty: DifficultyLevel) {
 
     <div class="flex flex-col gap-3">
       <button
+        type="button"
+        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] enabled:hover:border-accent enabled:hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
         :disabled="pending"
-        :class="{ 'opacity-50 cursor-not-allowed': pending }"
-        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent disabled:hover:border-border disabled:hover:text-ink"
         @click="startGame('easy')"
       >
-        {{ selectedDifficulty === 'easy' && pending ? $t('difficulty.loading') : $t('difficulty.easy') }}
+        {{ pendingDifficulty === 'easy' ? $t('difficulty.loading') : $t('difficulty.easy') }}
       </button>
       <button
+        type="button"
+        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] enabled:hover:border-accent enabled:hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
         :disabled="pending"
-        :class="{ 'opacity-50 cursor-not-allowed': pending }"
-        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent disabled:hover:border-border disabled:hover:text-ink"
         @click="startGame('normal')"
       >
-        {{ selectedDifficulty === 'normal' && pending ? $t('difficulty.loading') : $t('difficulty.normal') }}
+        {{ pendingDifficulty === 'normal' ? $t('difficulty.loading') : $t('difficulty.normal') }}
       </button>
       <button
+        type="button"
+        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] enabled:hover:border-accent enabled:hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
         :disabled="pending"
-        :class="{ 'opacity-50 cursor-not-allowed': pending }"
-        class="border border-border bg-surface px-4 py-3 text-center font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent focus-visible:border-accent disabled:hover:border-border disabled:hover:text-ink"
         @click="startGame('difficult')"
       >
-        {{ selectedDifficulty === 'difficult' && pending ? $t('difficulty.loading') : $t('difficulty.difficult') }}
+        {{ pendingDifficulty === 'difficult' ? $t('difficulty.loading') : $t('difficulty.difficult') }}
       </button>
     </div>
 
-    <div
+    <p
       v-if="errorCode"
-      class="rounded border border-error bg-surface/50 px-4 py-3 text-center text-sm text-error"
+      class="font-sans text-sm text-danger"
     >
       {{ $t('difficulty.loadFailed') }}
-    </div>
+    </p>
   </main>
 </template>
