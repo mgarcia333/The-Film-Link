@@ -2,6 +2,7 @@
 definePageMeta({ ssr: false })
 
 const gameStore = useGameStore()
+const statsStore = useStatsStore()
 const { pending, errorCode, reveal } = useChallengeReveal()
 
 if (!gameStore.status || gameStore.status === 'playing') {
@@ -15,12 +16,21 @@ onMounted(async () => {
   const result = await reveal(gameStore.sourceMovie, gameStore.destinationMovie)
   if (result.path && result.stepCount !== null) {
     gameStore.setOptimalPath(result.path, result.stepCount)
+    const status = gameStore.status
+    if (gameStore.mode === 'daily' && gameStore.dailyChallengeDate && (status === 'won' || status === 'surrendered')) {
+      statsStore.recordResult(gameStore.dailyChallengeDate, {
+        status,
+        stepsTaken: gameStore.stepsTaken,
+        optimalStepCount: result.stepCount,
+      })
+    }
   }
 })
 
 async function playAgain() {
+  const wasDaily = gameStore.mode === 'daily'
   gameStore.reset()
-  await navigateTo('/play/personalized')
+  await navigateTo(wasDaily ? '/' : '/play/personalized')
 }
 </script>
 
@@ -75,7 +85,7 @@ async function playAgain() {
       class="border border-border bg-surface px-4 py-3 font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent"
       @click="playAgain"
     >
-      jugar de nuevo
+      {{ gameStore.mode === 'daily' ? 'volver al inicio' : 'jugar de nuevo' }}
     </button>
   </main>
 </template>

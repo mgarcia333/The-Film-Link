@@ -11,9 +11,14 @@ export interface GamePathNode {
 }
 
 export type GameStatus = 'playing' | 'won' | 'surrendered'
+export type GameMode = 'personalized' | 'daily'
 
 interface GameStoreState {
   status: GameStatus | null
+  mode: GameMode | null
+  // Only set when mode is 'daily' - the UTC date the challenge belongs to,
+  // used to record the result under the right day and to detect replays.
+  dailyChallengeDate: string | null
   sourceMovie: TmdbMovieSummary | null
   destinationMovie: TmdbMovieSummary | null
   playedPath: GamePathNode[]
@@ -27,6 +32,8 @@ interface GameStoreState {
 export const useGameStore = defineStore('game', {
   state: (): GameStoreState => ({
     status: null,
+    mode: null,
+    dailyChallengeDate: null,
     sourceMovie: null,
     destinationMovie: null,
     playedPath: [],
@@ -43,8 +50,10 @@ export const useGameStore = defineStore('game', {
   },
 
   actions: {
-    startGame(source: TmdbMovieSummary, destination: TmdbMovieSummary) {
+    startGame(source: TmdbMovieSummary, destination: TmdbMovieSummary, mode: GameMode, dailyChallengeDate: string | null = null) {
       this.status = 'playing'
+      this.mode = mode
+      this.dailyChallengeDate = dailyChallengeDate
       this.sourceMovie = source
       this.destinationMovie = destination
       this.playedPath = [{ kind: 'movie', id: source.id, name: source.title, imagePath: source.poster_path }]
@@ -85,6 +94,8 @@ export const useGameStore = defineStore('game', {
 
     reset() {
       this.status = null
+      this.mode = null
+      this.dailyChallengeDate = null
       this.sourceMovie = null
       this.destinationMovie = null
       this.playedPath = []

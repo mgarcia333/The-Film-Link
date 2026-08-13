@@ -15,5 +15,10 @@
       // (see README: `wrangler kv namespace create GAME_KV`)
       "id": "00000000000000000000000000000000"
     }
-  ]
+  ],
+  // Optional: precomputes the daily challenge shortly after UTC midnight.
+  // Safe to remove - the challenge also generates lazily on first request.
+  "triggers": {
+    "crons": ["5 0 * * *"]
+  }
 }

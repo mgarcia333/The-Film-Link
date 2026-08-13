@@ -27,7 +27,7 @@ async function start() {
     return
   }
 
-  gameStore.startGame(source.value, destination.value)
+  gameStore.startGame(source.value, destination.value, 'personalized')
   await navigateTo('/play/game')
 }
 </script>
