@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ ssr: false })
 
+const { locale } = useI18n()
 const gameStore = useGameStore()
 const statsStore = useStatsStore()
 const { pending, errorCode, reveal } = useChallengeReveal()
@@ -41,19 +42,19 @@ async function playAgain() {
   >
     <header class="flex flex-col gap-2 text-center">
       <h1 class="font-heading text-xl uppercase tracking-widest text-ink">
-        {{ gameStore.status === 'won' ? 'has ganado' : 'te has rendido' }}
+        {{ gameStore.status === 'won' ? $t('result.won') : $t('result.surrendered') }}
       </h1>
       <p class="font-mono text-sm text-ink-muted">
-        pasos dados: <span class="tabular-nums text-ink">{{ gameStore.stepsTaken }}</span>
+        {{ $t('result.stepsTaken') }}: <span class="tabular-nums text-ink">{{ formatNumber(gameStore.stepsTaken, locale) }}</span>
         <template v-if="gameStore.optimalStepCount !== null">
-          · óptimo: <span class="tabular-nums text-ink">{{ gameStore.optimalStepCount }}</span>
+          · {{ $t('result.optimal') }}: <span class="tabular-nums text-ink">{{ formatNumber(gameStore.optimalStepCount, locale) }}</span>
         </template>
       </p>
     </header>
 
     <section class="flex flex-col gap-2">
       <h2 class="font-heading text-xs uppercase tracking-widest text-ink-muted">
-        tu camino
+        {{ $t('result.yourPath') }}
       </h2>
       <CreditsRoll :path="gameStore.playedPath" />
     </section>
@@ -62,20 +63,20 @@ async function playAgain() {
       v-if="pending"
       class="font-sans text-sm text-ink-muted"
     >
-      calculando el camino más corto...
+      {{ $t('result.calculatingOptimal') }}
     </section>
     <section
       v-else-if="errorCode"
       class="font-sans text-sm text-danger"
     >
-      no se ha podido calcular el camino más corto.
+      {{ $t('result.optimalFailed') }}
     </section>
     <section
       v-else-if="gameStore.optimalPath"
       class="flex flex-col gap-2"
     >
       <h2 class="font-heading text-xs uppercase tracking-widest text-ink-muted">
-        camino más corto posible
+        {{ $t('result.shortestPossible') }}
       </h2>
       <CreditsRoll :path="gameStore.optimalPath" />
     </section>
@@ -85,7 +86,7 @@ async function playAgain() {
       class="border border-border bg-surface px-4 py-3 font-heading text-sm uppercase tracking-widest text-ink transition-colors duration-[120ms] hover:border-accent hover:text-accent"
       @click="playAgain"
     >
-      {{ gameStore.mode === 'daily' ? 'volver al inicio' : 'jugar de nuevo' }}
+      {{ gameStore.mode === 'daily' ? $t('common.backHome') : $t('result.playAgain') }}
     </button>
   </main>
 </template>

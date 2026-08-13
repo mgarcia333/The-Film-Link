@@ -4,6 +4,7 @@ import type { TmdbMovieSummary } from '~~/types/tmdb'
 const { label } = defineProps<{ label: string }>()
 const selected = defineModel<TmdbMovieSummary | null>({ default: null })
 
+const { locale } = useI18n()
 const inputId = useId()
 const query = ref('')
 const showResults = ref(false)
@@ -28,7 +29,7 @@ function changeSelection() {
 }
 
 function releaseYear(movie: TmdbMovieSummary): string {
-  return movie.release_date ? movie.release_date.slice(0, 4) : ''
+  return movie.release_date ? formatYear(Number(movie.release_date.slice(0, 4)), locale.value) : ''
 }
 </script>
 
@@ -66,7 +67,7 @@ function releaseYear(movie: TmdbMovieSummary): string {
         class="font-sans text-xs text-accent underline"
         @click="changeSelection"
       >
-        cambiar
+        {{ $t('search.change') }}
       </button>
     </div>
 
@@ -85,20 +86,26 @@ function releaseYear(movie: TmdbMovieSummary): string {
       >
 
       <ul
-        v-if="showResults && (results.length > 0 || pending || failed)"
+        v-if="showResults && (results.length > 0 || pending || failed || query.trim())"
         class="absolute z-10 mt-1 max-h-72 w-full overflow-y-auto border border-border bg-surface"
       >
         <li
           v-if="pending"
           class="px-3 py-2 font-sans text-xs text-ink-muted"
         >
-          buscando...
+          {{ $t('search.searching') }}
         </li>
         <li
           v-else-if="failed"
           class="px-3 py-2 font-sans text-xs text-danger"
         >
-          no se ha podido buscar. inténtalo de nuevo.
+          {{ $t('search.searchFailed') }}
+        </li>
+        <li
+          v-else-if="results.length === 0"
+          class="px-3 py-2 font-sans text-xs text-ink-muted"
+        >
+          {{ $t('search.noResults') }}
         </li>
         <li
           v-for="movie in results"

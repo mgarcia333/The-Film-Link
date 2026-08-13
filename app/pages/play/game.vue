@@ -10,6 +10,7 @@ interface Option {
   used: boolean
 }
 
+const { t, locale } = useI18n()
 const gameStore = useGameStore()
 const { pending, failed, loadMovieOptions, loadPersonOptions } = useNodeOptions()
 
@@ -35,7 +36,7 @@ async function loadOptions() {
       id: person.id,
       name: person.name,
       imagePath: person.profilePath,
-      subtitle: person.creditedAs === 'director' ? 'dirección' : 'reparto',
+      subtitle: person.creditedAs === 'director' ? t('game.director') : t('game.cast'),
       used: usedPersonIds.has(person.id),
     }))
   }
@@ -46,7 +47,7 @@ async function loadOptions() {
       id: movie.id,
       name: movie.title,
       imagePath: movie.posterPath,
-      subtitle: String(movie.releaseYear),
+      subtitle: formatYear(movie.releaseYear, locale.value),
       used: visitedMovieIds.value.has(movie.id),
     }))
   }
@@ -82,14 +83,14 @@ async function undo() {
     <header class="flex items-center justify-between">
       <div>
         <p class="font-mono text-xs text-ink-muted">
-          {{ gameStore.currentNode?.kind === 'movie' ? 'estás en' : 'has elegido a' }}
+          {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
         </p>
         <p class="font-sans text-base text-ink">
           {{ gameStore.currentNode?.name }}
         </p>
       </div>
       <p class="font-mono text-2xl tabular-nums text-ink">
-        {{ gameStore.stepsTaken }}
+        {{ formatNumber(gameStore.stepsTaken, locale) }}
       </p>
     </header>
 
@@ -100,19 +101,19 @@ async function undo() {
         :disabled="!gameStore.canUndo"
         @click="undo"
       >
-        deshacer
+        {{ $t('game.undo') }}
       </button>
       <button
         type="button"
         class="border border-border bg-surface px-3 py-2 font-sans text-xs uppercase tracking-widest text-danger transition-colors duration-[120ms] hover:opacity-80"
         @click="surrender"
       >
-        rendirse
+        {{ $t('game.surrender') }}
       </button>
     </div>
 
     <p class="font-sans text-sm text-ink-muted">
-      destino: {{ gameStore.destinationMovie?.title }}
+      {{ $t('game.destinationLabel', { title: gameStore.destinationMovie?.title }) }}
     </p>
 
     <div class="flex flex-col gap-2">
@@ -120,19 +121,19 @@ async function undo() {
         v-if="pending"
         class="font-sans text-sm text-ink-muted"
       >
-        cargando opciones...
+        {{ $t('game.loadingOptions') }}
       </p>
       <p
         v-else-if="failed"
         class="font-sans text-sm text-danger"
       >
-        no se han podido cargar las opciones. inténtalo de nuevo.
+        {{ $t('game.optionsFailed') }}
       </p>
       <p
         v-else-if="options.length === 0"
         class="font-sans text-sm text-ink-muted"
       >
-        no hay opciones disponibles aquí.
+        {{ $t('game.noOptions') }}
       </p>
 
       <ChoiceButton

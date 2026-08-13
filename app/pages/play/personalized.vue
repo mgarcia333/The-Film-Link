@@ -3,6 +3,8 @@ import type { TmdbMovieSummary } from '~~/types/tmdb'
 
 definePageMeta({ ssr: false })
 
+const { t } = useI18n()
+
 const source = ref<TmdbMovieSummary | null>(null)
 const destination = ref<TmdbMovieSummary | null>(null)
 const sameMovieSelected = computed(() => Boolean(source.value && destination.value && source.value.id === destination.value.id))
@@ -36,39 +38,39 @@ async function start() {
   <main class="mx-auto flex min-h-dvh max-w-md flex-col gap-6 px-4 py-12">
     <header class="flex flex-col gap-2">
       <h1 class="font-heading text-lg uppercase tracking-widest text-ink">
-        reto personalizado
+        {{ $t('nav.personalizedChallenge') }}
       </h1>
       <p class="font-sans text-sm text-ink-muted">
-        elige la película de salida y la película de destino.
+        {{ $t('personalized.subtitle') }}
       </p>
     </header>
 
     <MovieSearchField
       v-model="source"
-      label="salida"
+      :label="t('search.salidaLabel')"
     />
     <MovieSearchField
       v-model="destination"
-      label="destino"
+      :label="t('search.destinoLabel')"
     />
 
     <p
       v-if="sameMovieSelected"
       class="font-sans text-sm text-danger"
     >
-      elige dos películas distintas.
+      {{ $t('personalized.sameMovie') }}
     </p>
     <p
       v-else-if="notConnected"
       class="font-sans text-sm text-danger"
     >
-      estas dos películas no tienen conexión en tres saltos. prueba con otra.
+      {{ $t('personalized.notConnected') }}
     </p>
     <p
       v-else-if="errorCode"
       class="font-sans text-sm text-danger"
     >
-      no se ha podido comprobar la conexión. inténtalo de nuevo.
+      {{ $t('personalized.validationFailed') }}
     </p>
 
     <div class="flex items-center gap-3">
@@ -78,7 +80,7 @@ async function start() {
         :disabled="!canStart"
         @click="start"
       >
-        {{ pending ? 'comprobando conexión...' : 'empezar' }}
+        {{ pending ? $t('personalized.checking') : $t('personalized.start') }}
       </button>
       <button
         v-if="pending"
@@ -86,7 +88,7 @@ async function start() {
         class="border border-border bg-surface px-4 py-3 font-sans text-sm text-ink-muted"
         @click="cancel"
       >
-        cancelar
+        {{ $t('personalized.cancel') }}
       </button>
     </div>
   </main>

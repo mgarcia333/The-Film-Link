@@ -9,6 +9,7 @@ interface DailyChallengeResponse {
   destination: TmdbMovieSummary
 }
 
+const { locale } = useI18n()
 const gameStore = useGameStore()
 const statsStore = useStatsStore()
 
@@ -30,7 +31,9 @@ onMounted(async () => {
   }
 
   try {
-    const daily = await $fetch<DailyChallengeResponse>('/api/challenge/daily')
+    const daily = await $fetch<DailyChallengeResponse>('/api/challenge/daily', {
+      query: { lang: toTmdbLanguage(locale.value) },
+    })
     gameStore.startGame(daily.source, daily.destination, 'daily', daily.date)
     await navigateTo('/play/game')
   }
@@ -49,19 +52,19 @@ onMounted(async () => {
       v-if="alreadyPlayedToday"
       class="font-sans text-sm text-ink-muted"
     >
-      ya has jugado el reto de hoy. vuelve mañana.
+      {{ $t('daily.alreadyPlayed') }}
     </p>
     <p
       v-else-if="pending"
       class="font-sans text-sm text-ink-muted"
     >
-      preparando el reto de hoy...
+      {{ $t('daily.preparing') }}
     </p>
     <p
       v-else-if="errorCode"
       class="font-sans text-sm text-danger"
     >
-      no se ha podido cargar el reto de hoy. inténtalo de nuevo.
+      {{ $t('daily.loadFailed') }}
     </p>
   </main>
 </template>
