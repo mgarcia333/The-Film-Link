@@ -78,21 +78,26 @@ async function undo() {
 <template>
   <main
     v-if="gameStore.status === 'playing'"
-    class="mx-auto flex min-h-dvh max-w-md flex-col gap-6 px-4 py-8"
+    class="mx-auto flex min-h-dvh max-w-md flex-col gap-4 px-4 py-8"
   >
-    <header class="flex items-center justify-between">
-      <div>
-        <p class="font-mono text-xs text-ink-muted">
-          {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
-        </p>
-        <p class="font-sans text-base text-ink">
-          {{ gameStore.currentNode?.name }}
-        </p>
-      </div>
-      <p class="font-mono text-2xl tabular-nums text-ink">
+    <header class="flex items-start justify-between gap-3">
+      <p class="font-sans text-sm text-ink-muted">
+        {{ $t('game.destinationLabel', { title: gameStore.destinationMovie?.title }) }}
+      </p>
+      <p class="shrink-0 font-mono text-2xl tabular-nums text-ink">
         {{ formatNumber(gameStore.stepsTaken, locale) }}
       </p>
     </header>
+
+    <p class="font-mono text-xs text-ink-muted">
+      {{ gameStore.currentNode?.kind === 'movie' ? $t('game.youAreAtMovie') : $t('game.youPicked') }}
+      <span class="text-highlight">{{ gameStore.currentNode?.name }}</span>
+    </p>
+
+    <CreditsRoll
+      :path="gameStore.playedPath"
+      highlight-active
+    />
 
     <div class="flex items-center gap-3">
       <button
@@ -111,10 +116,6 @@ async function undo() {
         {{ $t('game.surrender') }}
       </button>
     </div>
-
-    <p class="font-sans text-sm text-ink-muted">
-      {{ $t('game.destinationLabel', { title: gameStore.destinationMovie?.title }) }}
-    </p>
 
     <div class="flex flex-col gap-2">
       <p
