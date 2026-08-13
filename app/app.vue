@@ -13,7 +13,8 @@ useHead({
 <template>
   <div class="min-h-dvh bg-bg font-sans text-ink">
     <NuxtRouteAnnouncer />
-    <header class="flex justify-end gap-2 p-2">
+    <header class="flex items-center justify-end gap-3 p-2">
+      <AuthStatus />
       <ThemeToggle />
       <LanguageSwitcher />
     </header>

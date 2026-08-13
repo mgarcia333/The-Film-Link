@@ -64,5 +64,9 @@
   "theme": {
     "light": "hell",
     "dark": "dunkel"
+  },
+  "auth": {
+    "signIn": "mit Google anmelden",
+    "signOut": "abmelden"
   }
 }
